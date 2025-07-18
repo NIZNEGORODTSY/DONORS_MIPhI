@@ -127,6 +127,8 @@ async def process_phone(message: Message, state: FSMContext):
                                      reply_markup=get_consent_keyboard())
 
                 await state.set_state(AuthState.waiting_for_answer)
+            else:
+                await state.set_state(RegisterState.fio)
     else:
         await message.answer('Проверьте правильность введённых данных!')
 
@@ -148,6 +150,16 @@ async def waiting_for_right_fio(message: Message, state: FSMContext):
     add_fio(message.from_user.id, text)
     await message.answer('Данные успешно изменены! Добро пожаловать в меню: /menu')
     await state.clear()
+
+
+@dp.message(RegisterState.fio)
+async def register_fio(message: Message, state: FSMContext):
+    await message.answer("Чтобы создать аккаунт, напишите ваше ФИО")
+    text = message.textу
+    await state.clear()
+
+
+
 
 
 @dp.message(F.text == "📋 Мои данные")
