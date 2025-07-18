@@ -25,7 +25,7 @@ import asyncio
 
 from core import check_admin, check_user_by_phone, get_user, add_fio, get_user_history
 
-from scripts import is_valid_russian_phone, compare_date
+from scripts import is_valid_russian_phone, compare_date, display_history
 
 reader.read_config()
 
@@ -153,15 +153,17 @@ async def waiting_for_right_fio(message: Message, state: FSMContext):
 @dp.message(F.text == "📋 Мои данные")
 async def show_profile(message: Message):
     name = get_user(message.from_user.id)
-    date1 = name.CountGavr
-    date2 = name.CountFMBA
+    history = get_user_history(name.Id)
+    date1 = name.LastGavr
+    date2 = name.LastFMBA
     date_res, place = compare_date(date1, date2)
     await message.answer(f"""<b>ФИО</b>: {name.Fio}
 <b>Количество донаций:</b> {name.SumCount}
 <b>Дата последней донации:</b> {date_res}
 <b>Место последней донации:</b> {place}
 <b>Регистрация в регистре ДМК:</b> {name.Registry}
-<b>История донаций:</b> {get_user_history(message.from_user.id)}""", parse_mode=ParseMode.HTML)
+<b>История донаций:</b> 
+{display_history(history)}""", parse_mode=ParseMode.HTML)
 
 
 @dp.message(Command('menu'))
