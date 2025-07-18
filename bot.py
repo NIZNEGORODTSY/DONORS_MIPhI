@@ -23,9 +23,9 @@ from aiogram.types import (
 )
 import asyncio
 
-from core import check_admin, check_user_by_phone, get_user, add_fio, get_user_history
+from core import check_admin, check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup
 
-from scripts import is_valid_russian_phone, compare_date, display_history
+from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, get_daily_weather
 
 reader.read_config()
 
@@ -46,6 +46,7 @@ class AuthState(StatesGroup):
 class RegisterState(StatesGroup):
     fio = State()
     group = State()
+    student_group = State()
     final = State
 
 
@@ -58,6 +59,17 @@ def get_consent_keyboard():
         keyboard=[
             [KeyboardButton(text="✅ Да, всё верно")],
             [KeyboardButton(text="❌ Нет, неверно")]
+        ],
+        resize_keyboard=True
+    )
+
+
+def choose_group():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🎓Студент")],
+            [KeyboardButton(text="💼Сотрудник")],
+            [KeyboardButton(text="🤲Внешний донор")],
         ],
         resize_keyboard=True
     )
@@ -117,7 +129,7 @@ async def process_phone(message: Message, state: FSMContext):
     phone_number = message.text  # Получаем введённый номер
     if is_valid_russian_phone(phone_number):
         res = check_admin(message.from_user.id)
-        if res is False:
+        if res is False: #БААААААААААААААААГ
             await message.answer('Добро пожаловать в админ-панель')
         else:
             res = check_user_by_phone(phone_number)
@@ -128,6 +140,7 @@ async def process_phone(message: Message, state: FSMContext):
 
                 await state.set_state(AuthState.waiting_for_answer)
             else:
+                await message.answer("Чтобы создать аккаунт, напишите ваше ФИО")
                 await state.set_state(RegisterState.fio)
     else:
         await message.answer('Проверьте правильность введённых данных!')
@@ -154,12 +167,38 @@ async def waiting_for_right_fio(message: Message, state: FSMContext):
 
 @dp.message(RegisterState.fio)
 async def register_fio(message: Message, state: FSMContext):
-    await message.answer("Чтобы создать аккаунт, напишите ваше ФИО")
-    text = message.textу
+    fio = message.text
+    if validate_full_name(fio):
+        add_fio(message.from_user.id, fio)
+        await message.answer("Кто вы?", reply_markup=choose_group())
+        await state.set_state(RegisterState.group)
+    else:
+        await message.answer('Проверьте правильность введённых данных!')
+
+
+@dp.message(RegisterState.group)
+async def define_group(message: Message, state: FSMContext):
+    text = message.text
+    if text == "🎓Студент":
+        await message.answer("Напишите номер вашей группы")
+        state.set_state(RegisterState.student_group)
+    if text == "💼Сотрудник":
+        add_ugroup(message.from_user.id, "Сотрудник")
+        await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
+        await state.clear()
+    if text == "🤲Внешний донор":
+        add_ugroup(message.from_user.id, "Внешний донор")
+        await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
+        await state.clear()
+    pass
+
+
+@dp.message(RegisterState.student_group)
+async def student_group(message: Message, state: FSMContext):
+    text = message.text
+    add_ugroup(message.from_user.id, text)
+    await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
     await state.clear()
-
-
-
 
 
 @dp.message(F.text == "📋 Мои данные")
@@ -178,6 +217,11 @@ async def show_profile(message: Message):
 {display_history(history)}""", parse_mode=ParseMode.HTML)
 
 
+@dp.message(F.text == "ℹ️ Информация о донорстве")
+async def show_information(message: Message):
+    await message.answer(generate_donor_advice(get_daily_weather()))
+
+
 @dp.message(Command('menu'))
 async def another_menu_handler(message: Message):
     await message.answer(
@@ -190,7 +234,6 @@ async def main():
     await bot.set_my_commands([
         BotCommand(command='start', description='Приветствие'),
         BotCommand(command='menu', description='Меню'),
-        BotCommand(command='another_menu', description='Другое меню'),
         BotCommand(command='authenticate', description='идентификация')
     ])
 

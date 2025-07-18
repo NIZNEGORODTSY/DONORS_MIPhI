@@ -17,7 +17,7 @@ def check_user_by_phone(phone_number: str) -> bool:
 
 def check_admin(tgid: int) -> bool:
     res = dbapi.get_admin(tgid)
-    return res[0] == 1
+    return res[0] == 1  # Здесь всё время крашится код
 
 
 def add_user(phone_number: str, tgid: int):
@@ -29,7 +29,7 @@ def add_fio(tgid: int, fio: str):
 
 
 def add_ugroup(tgid: int, ugroup: str):
-    return dbapi.add_ugroup(tgid, ugroup)
+    dbapi.add_ugroup(tgid, ugroup)
 
 
 def add_contacts(tgid: int, contacts: str):
@@ -83,6 +83,7 @@ def get_user_history(uid: int) -> list[Donation]:
 
     return res
 
+
 def get_info_message(info_type: int) -> str:
     if info_type == InfoTypes.DonationMEPHI:
         filepath = 'donation_mephi'
@@ -102,11 +103,8 @@ def get_info_message(info_type: int) -> str:
         filepath = 'donor_requirements'
     elif info_type == InfoTypes.DonorTempContrs:
         filepath = 'donor_temp_contraindications'
-    
-    with open(filepath + '.txt', 'r') as f:
-        res = f.read()
-    
-    return res
-    
 
-get_user_history(408)
+    with open('messages/' + filepath + '.txt', 'r') as f:
+        res = f.read()
+
+    return res
