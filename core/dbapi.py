@@ -3,11 +3,13 @@ import config.reader as reader
 
 reader.read_config()
 
+
 def some_function():
     def my_query(cursor):
         query = f"""some query"""
         cursor.execute(query)
-        return cursor.fetchone() # Какой-нибудь fetch
+        return cursor.fetchone()  # Какой-нибудь fetch
+
     res = execute(my_query)
     return res
 
@@ -25,4 +27,13 @@ def execute(dbfun):
     res = dbfun(cursor)
     conn.commit()
     conn.close()
+    return res
+
+
+def is_admin(number):
+    def my_query(cursor):
+        query = f"""SELECT is_admin FROM users WHERE phonenumber = {number}"""
+        cursor.execute(query)
+        return cursor.fetchone()  # Какой-нибудь fetch
+    res = execute(my_query)
     return res
