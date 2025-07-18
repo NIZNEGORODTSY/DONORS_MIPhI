@@ -53,15 +53,15 @@ def get_admin(tgid: int):
     res = execute(my_query)
     return res
 
-def add_user(number: str, tgid: int):
+def add_user(number: str, tgid: int) -> int:
     def my_query(cursor):
-        query = f"""INSERT INTO users (phonenumber, tgid) VALUES ('{number}', '{tgid}')"""
+        query = f"""INSERT INTO users (phonenumber, tgid, isadmin) VALUES ('{number}', '{tgid}', 0)"""
         cursor.execute(query)
         return cursor.fetchone()
     res = execute(my_query)
     return res
 
-def add_fio(tgid: int, fio: str):
+def add_fio(tgid: int, fio: str) -> int:
     def my_query(cursor):
         query = f"""UPDATE users SET fio = '{fio}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -69,7 +69,7 @@ def add_fio(tgid: int, fio: str):
     res = execute(my_query)
     return res
 
-def add_ugroup(tgid: int, ugroup: str):
+def add_ugroup(tgid: int, ugroup: str) -> int:
     def my_query(cursor):
         query = f"""UPDATE users SET ugroup = '{ugroup}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -77,7 +77,7 @@ def add_ugroup(tgid: int, ugroup: str):
     res = execute(my_query)
     return res
 
-def add_contacts(tgid: int, contacts: str):
+def add_contacts(tgid: int, contacts: str) -> int:
     def my_query(cursor):
         query = f"""UPDATE users SET contacts = '{contacts}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -85,7 +85,7 @@ def add_contacts(tgid: int, contacts: str):
     res = execute(my_query)
     return res
 
-def add_donation(uid: int):
+def add_donation(uid: int) -> int:
     def my_query(cursor):
         query = f"""INSERT INTO donations (uid) VALUES ({uid})"""
         cursor.execute(query)
@@ -93,7 +93,7 @@ def add_donation(uid: int):
     res = execute(my_query)
     return res
 
-def add_donation_donplace(uid: int, donplace: int):
+def add_donation_donplace(uid: int, donplace: int) -> int:
     def my_query(cursor):
         query = f"""UPDATE donations SET donplace = {donplace} WHERE uid = {uid}"""
         cursor.execute(query)
@@ -101,7 +101,7 @@ def add_donation_donplace(uid: int, donplace: int):
     res = execute(my_query)
     return res
 
-def add_donation_donplace(uid: int, dondate: str):
+def add_donation_donplace(uid: int, dondate: str) -> int:
     def my_query(cursor):
         query = f"""UPDATE donations SET dondate = '{dondate}' WHERE uid = {uid}"""
         cursor.execute(query)
