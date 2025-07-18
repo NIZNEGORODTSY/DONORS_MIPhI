@@ -15,7 +15,7 @@ def some_function():
 
 def get_users_gy_phone(phone: str) -> list:
     def my_query(cursor):
-        query = f"""SELECT * FROM users WHERE PhoneNumber={phone}"""
+        query = f"""SELECT * FROM users WHERE PhoneNumber='{phone}'"""
         cursor.execute(query)
         return cursor.fetchall()
     res = execute(my_query)
@@ -25,7 +25,7 @@ def get_users_gy_phone(phone: str) -> list:
 
 def execute(dbfun):
     conn = psycopg2.connect(
-        dbname=reader.get_param_value('dbname'),
+        #dbname=reader.get_param_value('dbname'),
         user=reader.get_param_value('dbuser'),
         password=reader.get_param_value('dbpwd'),
         host=reader.get_param_value('dbhost'),
@@ -39,9 +39,9 @@ def execute(dbfun):
     return res
 
 
-def is_admin(number):
+def get_admin(number):
     def my_query(cursor):
-        query = f"""SELECT is_admin FROM users WHERE phonenumber = {number}"""
+        query = f"""SELECT isadmin FROM users WHERE PhoneNumber='{number}'"""
         cursor.execute(query)
         return cursor.fetchone()  # Какой-нибудь fetch
     res = execute(my_query)
