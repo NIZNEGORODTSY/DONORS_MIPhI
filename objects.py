@@ -28,3 +28,14 @@ class Donation:
 
     def __init__(self):
         pass
+
+class InfoTypes:
+    DonationMEPHI = 0
+    DonationProcedure = 1
+    DonorAbsContrs = 2
+    DonorDiet = 3
+    DonorImportance = 4
+    DonorJoinRegistry = 5
+    DonorPreparation = 6
+    DonorRequirements = 7
+    DonorTempContrs = 8

@@ -1,5 +1,5 @@
 import dbapi
-from objects import User, Donation
+from objects import User, Donation, InfoTypes
 
 
 def get_uid(tgid: int) -> int:
@@ -83,5 +83,30 @@ def get_user_history(uid: int) -> list[Donation]:
 
     return res
 
+def get_info_message(info_type: int) -> str:
+    if info_type == InfoTypes.DonationMEPHI:
+        filepath = 'donation_mephi'
+    elif info_type == InfoTypes.DonationProcedure:
+        filepath = 'donation_procedure'
+    elif info_type == InfoTypes.DonorAbsContrs:
+        filepath = 'donor_abs_contraindications'
+    elif info_type == InfoTypes.DonorDiet:
+        filepath = 'donor_diet'
+    elif info_type == InfoTypes.DonorImportance:
+        filepath = 'donor_importance'
+    elif info_type == InfoTypes.DonorJoinRegistry:
+        filepath = 'donor_join_registry'
+    elif info_type == InfoTypes.DonorPreparation:
+        filepath = 'donor_preparation'
+    elif info_type == InfoTypes.DonorRequirements:
+        filepath = 'donor_requirements'
+    elif info_type == InfoTypes.DonorTempContrs:
+        filepath = 'donor_temp_contraindications'
+    
+    with open(filepath + '.txt', 'r') as f:
+        res = f.read()
+    
+    return res
+    
 
-get_user_history(1)
+get_user_history(408)
