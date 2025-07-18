@@ -1,5 +1,7 @@
 import psycopg2
 import config.reader as reader
+import psycopg2
+import pandas as pd
 
 reader.read_config()
 
@@ -12,10 +14,7 @@ conn = psycopg2.connect(
     )
 cursor = conn.cursor()
 
-# Запросы для миграции
-query = f"""some migration query"""
 
-cursor.execute(query)
 conn.commit()
 
 conn.close()

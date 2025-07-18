@@ -11,6 +11,15 @@ def some_function():
     res = execute(my_query)
     return res
 
+def get_users_gy_phone(phone: str) -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users WHERE PhoneNumber={phone}"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+
 
 def execute(dbfun):
     conn = psycopg2.connect(
