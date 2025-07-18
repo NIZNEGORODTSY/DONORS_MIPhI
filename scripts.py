@@ -10,8 +10,8 @@ def is_valid_russian_phone(phone):
 def compare_date(date1: datetime.date, date2: datetime.date):
     today = datetime.date.today()
     if date1 != 0 & date2 != 0:
-        delta1 = abs((today.days() - date1.days))
-        delta2 = abs((today.days() - date2.days))
+        delta1 = abs((date1 - today).days)
+        delta2 = abs((date2 - today).days)
         if delta1 < delta2:
             return date1, 'Центр Крови им. О.К. Гаврилова'
         else:
