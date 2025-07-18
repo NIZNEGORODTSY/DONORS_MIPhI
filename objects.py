@@ -1,5 +1,6 @@
 import datetime
 
+
 class User:
     Id: int
     Fio: str | None
@@ -17,6 +18,7 @@ class User:
 
     def __init__(self):
         pass
+
 
 class Donation:
     Id: int

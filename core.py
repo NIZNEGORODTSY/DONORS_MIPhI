@@ -1,9 +1,11 @@
 import dbapi
 from objects import User, Donation
 
+
 def get_uid(tgid: int) -> int:
     res = dbapi.get_uid(tgid)
     return res[0]
+
 
 def check_user_by_phone(phone_number: str) -> bool:
     users = dbapi.get_users_gy_phone(phone_number)
@@ -12,29 +14,37 @@ def check_user_by_phone(phone_number: str) -> bool:
     #     return False
     # return True
 
+
 def check_admin(tgid: int) -> bool:
     res = dbapi.get_admin(tgid)
     return res[0] == 1
 
+
 def add_user(phone_number: str, tgid: int):
     return dbapi.add_user(phone_number, tgid)
 
+
 def add_fio(tgid: int, fio: str):
-    return dbapi.add_fio(tgid, fio)
+    dbapi.add_fio(tgid, fio)
+
 
 def add_ugroup(tgid: int, ugroup: str):
     return dbapi.add_ugroup(tgid, ugroup)
 
+
 def add_contacts(tgid: int, contacts: str):
     return dbapi.add_contacts(tgid, contacts)
+
 
 def add_donation(tgid: int) -> int:
     uid = get_uid(tgid)
     return dbapi.add_donation(uid)
 
-def add_donation_donplace(tgid: int, donplace: int): # 0 - Гавр, 1 - ФМБА
+
+def add_donation_donplace(tgid: int, donplace: int):  # 0 - Гавр, 1 - ФМБА
     uid = get_uid(tgid)
     return dbapi.add_donation_donplace(uid, donplace)
+
 
 def get_user(tgid: int) -> User:
     ans = dbapi.get_user(tgid)
@@ -56,6 +66,7 @@ def get_user(tgid: int) -> User:
 
     return res
 
+
 def get_user_history(uid: int) -> list[Donation]:
     ans = dbapi.get_donation_history(uid)
 
@@ -69,7 +80,8 @@ def get_user_history(uid: int) -> list[Donation]:
         Don.DonDate = donation[3]
 
         res.append(Don)
-    
+
     return res
+
 
 get_user_history(1)
