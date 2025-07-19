@@ -172,7 +172,6 @@ async def waiting_for_date(message: Message, state: FSMContext):
     chose = message.text
     if chose.isdigit() and 1 <= int(chose) <= max_id:
         res = ''
-        MAX = 0
         for event in data:
             if event.Id == int(chose):
                 res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
@@ -181,6 +180,7 @@ async def waiting_for_date(message: Message, state: FSMContext):
         add_registration(chose, uid)
         await message.answer(f"Вы записаны✅", reply_markup=get_main_menu_keyboard())
         # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
+        await state.clear()
     else:
         await message.answer('Проверьте правильность введённых данных')
 
