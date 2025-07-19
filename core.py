@@ -248,3 +248,24 @@ def export_excel() -> None:
     questions = get_all_questions()
     users = get_all_users()
     registrations = get_all_registations()
+
+
+def get_donor(phone_number: int) -> User:
+    ans = dbapi.get_user(phone_number)
+
+    res = User()
+    res.Id = ans[0][0]
+    res.Fio = ans[0][1]
+    res.Group = ans[0][2]
+    res.CountGavr = ans[0][3]
+    res.CountFMBA = ans[0][4]
+    res.SumCount = ans[0][5]
+    res.LastGavr = ans[0][6]
+    res.LastFMBA = ans[0][7]
+    res.Contacts = ans[0][8]
+    res.PhoneNumber = ans[0][9]
+    res.IsAdmin = ans[0][10]
+    res.Registry = ans[0][11]
+    res.Tgid = ans[0][12]
+
+    return res

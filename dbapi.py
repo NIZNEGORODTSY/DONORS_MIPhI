@@ -232,3 +232,13 @@ def get_all_donations() -> list:
         return cursor.fetchall()
     res = execute(my_query)
     return res
+
+
+def get_donor(phone_number: int) -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users WHERE tgid = '{phone_number}'"""
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    res = execute(my_query)
+    return res

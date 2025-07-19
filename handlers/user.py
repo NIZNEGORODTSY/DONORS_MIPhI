@@ -217,8 +217,13 @@ async def waiting_for_questions(message: Message, state: FSMContext):
 @dp.message(F.text == "Ответы на ваши вопросы")
 async def show_profile(message: Message, state: FSMContext):
     #Возвращает 408,409
-    x=get_user(message.from_user.id).Id
-    print(get_question(x).Id, get_question(x).Uid, get_question(x).QuestionMsg, get_question(x).HasReply, get_question(x).IsSeen, get_question(x).Answer)
+    y = get_question(get_user(message.from_user.id).Id)
+    k=1
+    for i in y:
+        if (i.HasReply == 1) and (i.IsSeen == 0):
+            await message.answer(str(k)+"\n"+i.Answer, reply_markup=get_main_menu_keyboard())
+            k+=1
+            #print(get_question(x).Id, get_question(x).Uid, get_question(x).QuestionMsg, get_question(x).HasReply, get_question(x).IsSeen, get_question(x).Answer)
     await state.clear()
 
 
