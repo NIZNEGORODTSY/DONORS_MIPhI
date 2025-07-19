@@ -176,5 +176,9 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
+    dbapi.add_question_repl_cond()
+
+def add_registration(eid: int, uid: int):
+    dbapi.add_registration(eid, uid)
 
 get_all_questions()

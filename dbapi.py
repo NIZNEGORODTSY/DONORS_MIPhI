@@ -193,3 +193,10 @@ def add_question_repl_cond(qid: int):
         cursor.execute(query)
     
     execute(my_query)
+
+def add_registration(eid: int, uid: int):
+    def my_query(cursor):
+        query = f"""INSERT INTO registered_people (id_events, uid) VALUES ({eid}, {uid})"""
+        cursor.execute(query)
+
+    execute(my_query)
