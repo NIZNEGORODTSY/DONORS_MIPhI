@@ -230,9 +230,9 @@ def get_donor(phone_number: int) -> list:
 
 
 def edit_donor(rules: dict, phone_number: str):
-    for key, value in rules.items():
-        def my_query(cursor):
-            query = f"""UPDATE users SET '{key}' = '{value}' WHERE id_q = '{phone_number}'"""
+    def my_query(cursor):
+        for key, value in rules.items():
+            query = f"""UPDATE users SET '{key}' = '{value}' WHERE phonenumver = '{phone_number}'"""
             cursor.execute(query)
 
     execute(my_query)
