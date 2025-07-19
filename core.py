@@ -168,9 +168,9 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 
     for e in ans:
         event = UpcomingEvent()
-        event.Id = e[0]
-        event.DonPlace = e[1]
-        event.DonDate = e[2]
+        event.Id = e[2]
+        event.DonPlace = e[0]
+        event.DonDate = e[1]
         res.append(event)
     return res
 
