@@ -1,6 +1,6 @@
 import dbapi
 from objects import *
-import pandas as pd # для экспорта
+import pandas as pd  # для экспорта
 
 
 def get_uid(tgid: int) -> int:
@@ -162,6 +162,7 @@ def get_info_message(info_type: int) -> str:
 
     return res
 
+
 def get_upcoming_events() -> list[UpcomingEvent]:
     ans = dbapi.get_upcoming_events()
 
@@ -175,12 +176,15 @@ def get_upcoming_events() -> list[UpcomingEvent]:
         res.append(event)
     return res
 
+
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
     dbapi.add_question_repl_cond(qid)
 
+
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)
+
 
 def get_all_users() -> list[User]:
     ans = dbapi.get_all_users()
@@ -204,10 +208,33 @@ def get_all_users() -> list[User]:
         res.append(user)
     return res
 
+
 def get_all_registations() -> list[Registration]:
     pass
+
 
 def export_excel() -> None:
     upcoming_events = get_upcoming_events()
     questions = get_all_questions()
     users = get_all_users()
+
+
+def edit_donor(phone_number: int) -> User:
+    ans = dbapi.get_user(phone_number)
+
+    res = User()
+    res.Id = ans[0][0]
+    res.Fio = ans[0][1]
+    res.Group = ans[0][2]
+    res.CountGavr = ans[0][3]
+    res.CountFMBA = ans[0][4]
+    res.SumCount = ans[0][5]
+    res.LastGavr = ans[0][6]
+    res.LastFMBA = ans[0][7]
+    res.Contacts = ans[0][8]
+    res.PhoneNumber = ans[0][9]
+    res.IsAdmin = ans[0][10]
+    res.Registry = ans[0][11]
+    res.Tgid = ans[0][12]
+
+    return res

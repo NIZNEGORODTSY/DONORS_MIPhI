@@ -160,8 +160,8 @@ def get_restrictions(requirements):
         filename = 'messages/donation_procedure.txt'
     elif requirements == 'Процедура сдачи крови в МИФИ':
         filename = 'messages/donation_mephi.txt'
-    else:
-        return "Неизвестный запрос"
+    elif requirements == '🔙Вернуться в меню' or requirements == '':
+        return
     
     try:
         with open(filename, 'r', encoding='utf-8') as file:
