@@ -61,17 +61,15 @@ def get_admin(tgid: int):
     return res
 
 
-def add_user(number: str, tgid: int) -> int:
+def add_user(number: str, tgid: int):
     def my_query(cursor):
         query = f"""INSERT INTO users (phonenumber, tgid, isadmin) VALUES ('{number}', '{tgid}', 0)"""
         cursor.execute(query)
-        return cursor.fetchone()
 
-    res = execute(my_query)
-    return res
+    execute(my_query)
 
 
-def add_fio(tgid: int, fio: str) -> int:
+def add_fio(tgid: int, fio: str):
     def my_query(cursor):
         query = f"""UPDATE users SET fio = '{fio}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -79,7 +77,7 @@ def add_fio(tgid: int, fio: str) -> int:
     execute(my_query)
 
 
-def add_ugroup(tgid: int, ugroup: str) -> int:
+def add_ugroup(tgid: int, ugroup: str):
     def my_query(cursor):
         query = f"""UPDATE users SET ugroup = '{ugroup}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -87,47 +85,39 @@ def add_ugroup(tgid: int, ugroup: str) -> int:
     execute(my_query)
 
 
-def add_contacts(tgid: int, contacts: str) -> int:
+def add_contacts(tgid: int, contacts: str):
     def my_query(cursor):
         query = f"""UPDATE users SET contacts = '{contacts}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
-        return cursor.fetchone()
 
-    res = execute(my_query)
-    return res
+    execute(my_query)
 
 
-def add_donation(uid: int) -> int:
+def add_donation(uid: int):
     def my_query(cursor):
         query = f"""INSERT INTO donations (uid) VALUES ({uid})"""
         cursor.execute(query)
-        return cursor.fetchone()
 
-    res = execute(my_query)
-    return res
+    execute(my_query)
 
 
-def add_donation_donplace(uid: int, donplace: int) -> int:
+def add_donation_donplace(uid: int, donplace: int):
     def my_query(cursor):
         query = f"""UPDATE donations SET donplace = {donplace} WHERE uid = {uid}"""
         cursor.execute(query)
-        return cursor.fetchone()
 
-    res = execute(my_query)
-    return res
+    execute(my_query)
 
 
-def add_donation_donplace(uid: int, dondate: str) -> int:
+def add_donation_donplace(uid: int, dondate: str):
     def my_query(cursor):
         query = f"""UPDATE donations SET dondate = '{dondate}' WHERE uid = {uid}"""
         cursor.execute(query)
-        return cursor.fetchone()
 
-    res = execute(my_query)
-    return res
+    execute(my_query)
 
 
-def get_user(tgid: int):
+def get_user(tgid: int) -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM users WHERE tgid = '{tgid}'"""
         cursor.execute(query)
@@ -137,7 +127,7 @@ def get_user(tgid: int):
     return res
 
 
-def get_donation_history(uid: int):
+def get_donation_history(uid: int) -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM donations WHERE uid = {uid} ORDER BY dondate"""
         cursor.execute(query)
@@ -147,7 +137,7 @@ def get_donation_history(uid: int):
     return res
 
 
-def get_admins():
+def get_admins() -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM users WHERE isadmin = 1"""
         cursor.execute(query)
@@ -189,3 +179,17 @@ def get_upcoming_events() -> list:
         return cursor.fetchall()
     res = execute(my_query)
     return res
+
+def add_question_ans(qid: int, ans: str):
+    def my_query(cursor):
+        query = f"""UPDATE questions SET answer = '{ans}' WHERE qid = {qid}"""
+        cursor.execute(query)
+
+    execute(my_query)
+
+def add_question_repl_cond(qid: int):
+    def my_query(cursor):
+        query = f"""UPDATE questions SET hasreply = 1 WHERE qid = {qid}"""
+        cursor.execute(query)
+    
+    execute(my_query)

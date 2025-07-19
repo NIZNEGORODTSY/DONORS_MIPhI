@@ -174,4 +174,7 @@ def get_upcoming_events() -> list[UpcomingEvent]:
         res.append(event)
     return res
 
+def add_question_ans(qid: int, ans: str):
+    dbapi.add_question_ans(qid, ans)
+
 get_all_questions()
