@@ -13,7 +13,6 @@ from core import check_user_by_phone, get_user, add_fio, get_user_history, add_u
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
     get_daily_weather, display_weather
 
-
 dp = Router()
 
 
@@ -32,6 +31,10 @@ class RegisterState(StatesGroup):
 
 class InfoState(StatesGroup):
     main_state = State()
+
+
+class Questions(StatesGroup):
+    waiting_for_question = State()
 
 
 @dp.message(F.text == '🔐Аутентификация')
@@ -74,7 +77,8 @@ async def waiting_for_answer(message: Message, state: FSMContext):
 async def waiting_for_right_fio(message: Message, state: FSMContext):
     text = message.text
     add_fio(message.from_user.id, text)
-    await message.answer('Данные успешно изменены! Добро пожаловать в меню: /menu')
+    await message.answer('Данные успешно изменены! Добро пожаловать в меню: /menu',
+                         reply_markup=get_main_menu_keyboard())
     await state.clear()
 
 
@@ -136,6 +140,17 @@ async def show_information(message: Message, state: FSMContext):
     weather = display_weather(get_daily_weather())
     await message.answer(advice + '\n' + weather)
     await state.clear()
+
+
+@dp.message(F.text == "❓ Задать вопрос")
+async def show_information(message: Message, state: FSMContext):
+    await message.answer("Напишите ваш вопрос")
+    await state.set_state(Questions.waiting_for_question)
+
+
+@dp.message(Questions.waiting_for_question)
+async def waiting_for_questions(message: Message, state: FSMContext):
+    question = message.text
 
 
 @dp.message(Command('menu'))
