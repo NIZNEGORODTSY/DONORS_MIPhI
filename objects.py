@@ -37,7 +37,7 @@ class Question:
     QuestionMsg: str
     HasReply: bool
     IsSeen: bool
-    Answer: str | None
+    Answer: Optional[str] = None
 
     def __init__(self):
         pass
