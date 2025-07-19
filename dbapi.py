@@ -182,7 +182,7 @@ def get_upcoming_events() -> list:
 
 def add_question_ans(qid: int, ans: str):
     def my_query(cursor):
-        query = f"""UPDATE questions SET answer = '{ans}' WHERE qid = {qid}"""
+        query = f"""UPDATE questions SET answer = '{ans}' WHERE id_q = {qid}"""
         cursor.execute(query)
 
     execute(my_query)
