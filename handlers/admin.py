@@ -12,7 +12,7 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
-from core import add_donor, add_question_ans
+from core import add_donor, add_question_ans, get_donor
 from dbapi import get_all_questions
 
 from keybord.user import choose_group
@@ -195,23 +195,38 @@ async def process_broadcast_message(message: Message, state: FSMContext):
 
 @dp.message(F.text == "📄 Редактировать информацию о доноре")
 async def edit_info_start(message: Message, state: FSMContext):
-    await message.answer("Введите номер телефона донора, данные которого вы хотите изменить", reply_markup=get_info_sections_keyboard())
+    await message.answer("Введите номер телефона донора, данные которого вы хотите изменить")
     await state.set_state(EditInfoForm.section)
 
 
 @dp.message(EditInfoForm.section)
 async def process_info_section(message: Message, state: FSMContext):
     text = message.text
-    #запрос к бд, чтобы получить по номеру телефона всю остальную информацию
+    x = get_donor(text)
+    print(x)
+    await message.answer("Скопируйте данные и измените их")
+    """###await message.answer(str(x.Id)+'\n'
+                         +str(x.Fio)+'\n'
+                         +str(x.Group)+'\n'
+                         +str(x.CountGavr)+'\n'
+                         +str(x.CountFMBA)+'\n'
+                         +str(x.SumCount)+'\n'
+                         +str(x.LastGavr)+'\n'
+                         +str(x.LastFMBA)+'\n'
+                         +str(x.Contacts)+'\n'
+                         +str(x.PhoneNumber)+'\n'
+                         +str(x.IsAdmin)+'\n'
+                         +str(x.Registry)+'\n'
+                         +str(x.Tgid)+'\n')"""
+    await state.set_state(EditInfoForm.new_text)
 
 
 @dp.message(EditInfoForm.new_text)
 async def process_new_info_text(message: Message, state: FSMContext):
-    data = await state.get_data()
-    section = data['section']
-
+    text=message.text
+    print(text)
     # Здесь должен быть код для сохранения новой информации
-    await message.answer(f"Раздел '{section}' успешно обновлен!", reply_markup=get_organizer_keyboard())
+    await message.answer(f"Профиль успешно обновлен!", reply_markup=get_organizer_keyboard())
     await state.clear()
 
 

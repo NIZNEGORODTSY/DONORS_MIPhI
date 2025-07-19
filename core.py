@@ -220,6 +220,7 @@ def export_excel() -> None:
     upcoming_events = get_upcoming_events()
     questions = get_all_questions()
     users = get_all_users()
+    registrations = get_all_registations()
 
 
 def get_donor(phone_number: int) -> User:

@@ -246,3 +246,37 @@ def get_questions_by_user(uid: int):
 
     res = execute(my_query)
     return res
+
+def get_all_registrations() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM registered_people"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+def get_all_users() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+def get_all_donations() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM donations"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+
+def get_donor(phone_number: int) -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users WHERE tgid = '{phone_number}'"""
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    res = execute(my_query)
+    return res
