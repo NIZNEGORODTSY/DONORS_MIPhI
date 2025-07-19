@@ -28,9 +28,6 @@ class DonorForm(StatesGroup):
     uggroup = State()
     student_group = State()
     event_date = State()
-    blood_center = State()
-    donated_blood = State()
-    donated_tube = State()
 
 
 class EventForm(StatesGroup):
@@ -107,6 +104,7 @@ async def process_event_date(message: Message, state: FSMContext):
     data = await state.get_data()
     add_donor(data['full_name'], data['donor_type'], text)
     await message.answer(f"Донор успешно добавлен!", reply_markup=get_organizer_keyboard())
+    await state.clear()
 
 
 @dp.message(F.text == "📅 Создать мероприятие")
