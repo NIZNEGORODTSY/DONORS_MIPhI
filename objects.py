@@ -38,6 +38,14 @@ class Question:
     def __init__(self):
         pass
 
+class UpcomingEvent:
+    Id: int
+    DonPlace: str
+    DonDate: datetime.date
+
+    def __init__(self):
+        pass
+
 class InfoTypes:
     DonationMEPHI = 0
     DonationProcedure = 1

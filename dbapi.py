@@ -182,4 +182,10 @@ def get_all_questions() -> list:
     res = execute(my_query)
     return res
 
-    execute(my_query)
+def get_upcoming_events() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM upcoming_event"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
