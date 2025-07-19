@@ -83,6 +83,7 @@ def get_user_history(uid: int) -> list[Donation]:
 
     return res
 
+
 def get_admins() -> list[User]:
     ans = dbapi.get_admins()
 
@@ -105,7 +106,7 @@ def get_admins() -> list[User]:
         adm.Tgid = u[12]
 
         res.append(adm)
-        
+
     return res
 
 
@@ -128,11 +129,11 @@ def get_info_message(info_type: int) -> str:
         filepath = 'donor_requirements'
     elif info_type == InfoTypes.DonorTempContrs:
         filepath = 'donor_temp_contraindications'
-    
+
     with open('messages/' + filepath + '.txt', 'r') as f:
         res = f.read()
-    
+
     return res
-    
+
 
 get_admins()

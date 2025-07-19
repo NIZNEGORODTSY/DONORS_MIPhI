@@ -6,15 +6,14 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 
-
 from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group
 
 from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup
 
-from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name
-
+from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, get_daily_weather, display_weather
 
 dp = Router()
+
 
 class AuthState(StatesGroup):
     waiting_for_phone = State()
@@ -27,7 +26,6 @@ class RegisterState(StatesGroup):
     group = State()
     final = State()
     student_group = State()
-
 
 
 class InfoState(StatesGroup):
@@ -44,12 +42,12 @@ async def authorization(message: Message, state: FSMContext):
 async def process_phone(message: Message, state: FSMContext):
     phone_number = message.text  # Получаем введённый номер
     if is_valid_russian_phone(phone_number):
-        #res = check_admin(message.from_user.id)
+        # res = check_admin(message.from_user.id)
         res = check_user_by_phone(phone_number)
         if res:
             name = get_user(message.from_user.id)
             await message.answer(f'Добро пожаловать, {name.Fio}! Проверьте правильность ваших данных.',
-                                reply_markup=get_consent_keyboard())
+                                 reply_markup=get_consent_keyboard())
 
             await state.set_state(AuthState.waiting_for_answer)
         else:
@@ -59,7 +57,6 @@ async def process_phone(message: Message, state: FSMContext):
         await message.answer('Проверьте правильность введённых данных!')
 
 
-
 @dp.message(AuthState.waiting_for_answer)
 async def waiting_for_answer(message: Message, state: FSMContext):
     text = message.text
@@ -67,7 +64,7 @@ async def waiting_for_answer(message: Message, state: FSMContext):
         await message.answer('Введите верный вариант...')
         await state.set_state(AuthState.waiting_for_right_fio)
     else:
-        await message.answer('Отлично! Добро пожаловать в меню: /menu')
+        await message.answer('Отлично! Добро пожаловать в меню:', reply_markup=get_main_menu_keyboard())
         await state.clear()
 
 
@@ -116,7 +113,7 @@ async def student_group(message: Message, state: FSMContext):
 
 
 @dp.message(F.text == "📋 Мои данные")
-async def show_profile(message: Message):
+async def show_profile(message: Message, state: FSMContext):
     name = get_user(message.from_user.id)
     history = get_user_history(name.Id)
     date1 = name.LastGavr
@@ -129,10 +126,15 @@ async def show_profile(message: Message):
 <b>Регистрация в регистре ДМК:</b> {name.Registry}
 <b>История донаций:</b> 
 {display_history(history)}""", parse_mode=ParseMode.HTML)
+    await state.clear()
 
-@dp.message(F.text == "ℹ️ Информация о донорстве")
-async def show_information(message: Message):
-    pass
+
+@dp.message(F.text == "🌤 Рекомендации для доноров на сегодня")
+async def show_information(message: Message, state: FSMContext):
+    advice = generate_donor_advice(get_daily_weather())
+    weather = display_weather(get_daily_weather())
+    await message.answer(advice + '\n' + weather)
+    await state.clear()
 
 
 @dp.message(Command('menu'))

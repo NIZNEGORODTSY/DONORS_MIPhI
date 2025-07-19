@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, BotCommand
 from aiogram.enums import ParseMode
 import config.reader as reader
+import logging
 
 from handlers import admin, user
 
@@ -12,11 +13,10 @@ from keybord.admin import get_organizer_keyboard
 
 # Настройка логирования
 
-BOT_TOKEN = reader.get_param_value('token')
-#ADMINS = get_admins()
-ADMINS = ''
 
-import logging
+TOKEN = reader.get_param_value('token')
+ADMINS = get_admins()
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 # Инициализация бота и диспетчера
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=TOKEN)
 dop = Dispatcher()
+
 
 # Хэндлеры
 @dop.message(Command("start"))
@@ -33,7 +34,7 @@ async def cmd_start(message: Message, state: FSMContext):
     if str(message.from_user.id) in ADMINS:
         await message.answer("Добро пожаловать в панель организатора!", reply_markup=get_organizer_keyboard())
     else:
-        
+
         await message.answer(f"""Здравствуйте, {message.from_user.full_name}! 👋 Я — помощник донорского центра МИФИ.
 
         Моя цель:
@@ -60,22 +61,19 @@ async def cmd_start(message: Message, state: FSMContext):
 
         !!!Продолжая использование, вы подтверждаете согласие с этими условиями!!!""", parse_mode=ParseMode.HTML)
         await bot.set_my_commands([
-        BotCommand(command='start', description='Приветствие'),
-        BotCommand(command='menu', description='Меню'),
-        BotCommand(command='another_menu', description='Другое меню'),
-        BotCommand(command='authenticate', description='идентификация')
+            BotCommand(command='start', description='Приветствие'),
+            BotCommand(command='menu', description='Меню'),
+            BotCommand(command='another_menu', description='Другое меню'),
+            BotCommand(command='authenticate', description='идентификация')
         ])
         await message.answer("Давайте начнём! Для регистрации нажмите /authenticate или выбери раздел в меню ↓")
-   
-    
-
 
 
 async def main():
     dop.include_routers(admin.dp)
     dop.include_routers(user.dp)
     await dop.start_polling(bot)
-    
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

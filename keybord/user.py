@@ -30,6 +30,7 @@ def get_main_menu_keyboard():
             [KeyboardButton(text="📋 Мои данные")],
             [KeyboardButton(text="📅 Записаться на донацию")],
             [KeyboardButton(text="ℹ️ Информация о донорстве")],
+            [KeyboardButton(text="🌤 Рекомендации для доноров на сегодня")],
             [KeyboardButton(text="❓ Задать вопрос")]
         ],
         resize_keyboard=True
