@@ -3,17 +3,17 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, BotCommand
 from aiogram.enums import ParseMode
+import config.reader as reader
 
 from handlers import admin, user
 
-#from based import gets_admins
+from core import get_admins
 from keybord.admin import get_organizer_keyboard
 
 # Настройка логирования
 
-BOT_TOKEN = "8195479409:AAFfZj3V05P5bZD0rCwwWF_a80nX6NObsa4"
-#ADMINS = gets_admins()
-ADMINS = ''
+BOT_TOKEN = reader.get_param_value('token')
+ADMINS = get_admins()
 
 import logging
 logging.basicConfig(level=logging.INFO)
