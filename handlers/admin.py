@@ -193,10 +193,19 @@ async def process_broadcast_message(message: Message, state: FSMContext):
     await state.clear()
 
 
+@dp.message(F.text == "Скачать статистику")
+async def edit_info_start(message: Message, state: FSMContext):
+    await message.answer("Вы получили все файлы, который храняться на сервере")
+
+
+
 @dp.message(F.text == "📄 Редактировать информацию о доноре")
 async def edit_info_start(message: Message, state: FSMContext):
     await message.answer("Введите номер телефона донора, данные которого вы хотите изменить")
     await state.set_state(EditInfoForm.section)
+
+
+
 
 
 @dp.message(EditInfoForm.section)
