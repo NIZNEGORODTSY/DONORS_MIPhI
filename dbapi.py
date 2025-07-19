@@ -231,7 +231,7 @@ def edit_donor(rules: dict, phone_number: str):
     execute(my_query)
 
 
-def get_question(uid: int):
+def get_questions_by_user(uid: int):
     def my_query(cursor):
         query = f"""SELECT * FROM questions WHERE uid = {uid}"""
         cursor.execute(query)
