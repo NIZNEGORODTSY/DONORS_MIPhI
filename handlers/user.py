@@ -201,7 +201,7 @@ async def info_about_donation(message: Message, state: FSMContext):
     await message.answer(get_restrictions(f"{text}"))
 
 
-@dp.message(F.text == "🌤 Рекомендации для доноров на сегодня")
+@dp.message(F.text == "🌤 Погодные советы")
 async def show_information(message: Message, state: FSMContext):
     advice = generate_donor_advice(get_daily_weather())
     weather = display_weather(get_daily_weather())
@@ -232,7 +232,7 @@ async def show_profile(message: Message, state: FSMContext):
     k = 1
     for i in y:
         if (i.HasReply == 1) and (i.IsSeen == 0):
-            await message.answer(str(k)+")" + "\n" + i.Answer, reply_markup=get_main_menu_keyboard())
+            await message.answer(str(k) + ")" + "\n" + i.Answer, reply_markup=get_main_menu_keyboard())
             k += 1
     if k == 1:
         await message.answer("Вы получили ответы на все вопросы.")
