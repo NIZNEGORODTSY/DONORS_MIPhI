@@ -145,10 +145,14 @@ async def show_questions(message: Message, state: FSMContext):
 @dp.message(AnswerForm.answer)
 async def process_answer(message: Message, state: FSMContext):
     text = message.text
+    k=1
     for i in get_all_questions():
         print(i)
-        if str(i[0])==text:
-           await message.answer(str(i[2])+ "\nВведите ответ:")
+        if i[3]==False:
+            if k == text:
+                await message.answer(str(i[2])+ "\nВведите ответ:")
+            else:
+                k+=1
         break 
     await state.update_data(id_q=str(i[0]))
     await state.set_state(AnswerForm.question_id)
