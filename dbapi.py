@@ -189,7 +189,7 @@ def add_question_ans(qid: int, ans: str):
 
 def add_question_repl_cond(qid: int):
     def my_query(cursor):
-        query = f"""UPDATE questions SET hasreply = 1 WHERE qid = {qid}"""
+        query = f"""UPDATE questions SET hasreply = 1 WHERE id_q = {qid}"""
         cursor.execute(query)
     
     execute(my_query)
