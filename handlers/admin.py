@@ -12,6 +12,10 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
+from core import add_donor
+
+from keybord.user import choose_group
+
 donors_db = []
 events_db = []
 questions_db = []
@@ -21,7 +25,8 @@ dp = Router()
 
 class DonorForm(StatesGroup):
     full_name = State()
-    donor_type = State()
+    uggroup = State()
+    student_group = State()
     event_date = State()
     blood_center = State()
     donated_blood = State()
@@ -68,51 +73,40 @@ async def add_donor_manually(message: Message, state: FSMContext):
 @dp.message(DonorForm.full_name)
 async def process_full_name(message: Message, state: FSMContext):
     await state.update_data(full_name=message.text)
-    await state.set_state(DonorForm.donor_type)
-    await message.answer("Выберите тип донора:", reply_markup=get_donor_type_keyboard())
+    await state.set_state(DonorForm.uggroup)
+    await message.answer("Выберите тип донора:", reply_markup=choose_group())
 
 
-@dp.message(DonorForm.donor_type, F.text.in_(["Внутренний донор", "Внешний донор"]))
+@dp.message(DonorForm.uggroup, F.text.in_(["💼Сотрудник", "🤲Внешний донор", "🎓Студент"]))
 async def process_donor_type(message: Message, state: FSMContext):
-    await state.update_data(donor_type=message.text)
-    await state.set_state(DonorForm.event_date)
+    text = message.text
+    if text == "💼Сотрудник":
+        await state.update_data(donor_type='Сотрудник')
+        await message.answer("Зарегистрирован ли в ДКМ?")
+        await state.set_state(DonorForm.event_date)
+    elif text == "🤲Внешний донор":
+        await state.update_data(donor_type='Внешний донор')
+        await message.answer("Зарегистрирован ли в ДКМ?")
+        await state.set_state(DonorForm.event_date)
+    elif text == '🎓Студент':
+        await message.answer("Напишите номер вашей группы")
+        await state.set_state(DonorForm.student_group)
+    
 
-    # Здесь нужно показать доступные даты мероприятий
-    events_list = "\n".join([f"{e['date']} - {e['blood_center']}" for e in events_db])
-    await message.answer(f"Введите дату мероприятия (из доступных):\n{events_list}",
-                         reply_markup=types.ReplyKeyboardRemove())
+@dp.message(DonorForm.student_group)
+async def student_group(message: Message, state: FSMContext):
+    text = message.text
+    await state.update_data(donor_type=text)
+    await message.answer("Зарегистрирован ли в ДКМ?")
+    await state.set_state(DonorForm.event_date)
 
 
 @dp.message(DonorForm.event_date)
 async def process_event_date(message: Message, state: FSMContext):
-    await state.update_data(event_date=message.text)
-    await state.set_state(DonorForm.blood_center)
-    await message.answer("Введите название центра крови:")
-
-
-@dp.message(DonorForm.blood_center)
-async def process_blood_center(message: Message, state: FSMContext):
-    await state.update_data(blood_center=message.text)
-    await state.set_state(DonorForm.donated_blood)
-    await message.answer("Донор сдал кровь?", reply_markup=get_yes_no_keyboard())
-
-
-@dp.message(DonorForm.donated_blood, F.text.in_(["Да", "Нет"]))
-async def process_donated_blood(message: Message, state: FSMContext):
-    await state.update_data(donated_blood=message.text == "Да")
-    await state.set_state(DonorForm.donated_tube)
-    await message.answer("Донор сдал пробирку для вступления в регистр ДКМ?", reply_markup=get_yes_no_keyboard())
-
-
-@dp.message(DonorForm.donated_tube, F.text.in_(["Да", "Нет"]))
-async def process_donated_tube(message: Message, state: FSMContext):
-    data = await state.update_data(donated_tube=message.text == "Да")
-    await state.clear()
-
-    # Сохраняем донора в "базу"
-    donors_db.append(data)
-
-    await message.answer(f"Донор {data['full_name']} успешно добавлен!", reply_markup=get_organizer_keyboard())
+    text = message.text
+    data = await state.get_data()
+    add_donor(data['full_name'], data['donor_type'], text)
+    await message.answer(f"Донор успешно добавлен!", reply_markup=get_organizer_keyboard())
 
 
 @dp.message(F.text == "📅 Создать мероприятие")
