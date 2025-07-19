@@ -21,6 +21,8 @@ ADMINS = []
 for el in data:
     ADMINS.append(el.Tgid)
 
+ADMINS = [] #УБРАТЬ, ЧТОБЫ ПОПАСТЬ В АДМИН-ПАНЕЛЬ
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
