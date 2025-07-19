@@ -34,6 +34,9 @@ class Question:
     Id: int
     Uid: int
     QuestionMsg: str
+    HasReply: bool
+    IsSeen: bool
+    Answer: str | None
 
     def __init__(self):
         pass
