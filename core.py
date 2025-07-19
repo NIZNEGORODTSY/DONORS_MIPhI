@@ -219,7 +219,7 @@ def export_excel() -> None:
     users = get_all_users()
 
 
-def edit_donor(phone_number: int) -> User:
+def get_donor(phone_number: int) -> User:
     ans = dbapi.get_user(phone_number)
 
     res = User()
@@ -238,3 +238,21 @@ def edit_donor(phone_number: int) -> User:
     res.Tgid = ans[0][12]
 
     return res
+
+
+def get_question(uid: int) -> Question:
+    q = dbapi.get_question(uid)
+
+    question = Question()
+    question.Id = q[0][0]
+    question.Uid = q[0][1]
+    question.QuestionMsg = q[0][2]
+    question.HasReply = q[0][3]
+    question.IsSeen = q[0][4]
+    question.Answer = q[0][5]
+
+    return question
+
+
+def edit_donor(rules: dict, phone_number: str):
+    dbapi.edit_donor(rules, phone_number)
