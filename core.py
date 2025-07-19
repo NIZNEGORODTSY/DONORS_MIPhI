@@ -181,6 +181,9 @@ def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
     dbapi.add_question_repl_cond(qid)
 
+def add_question_isseen_cond(uid: int):
+    dbapi.add_question_isseen_cond(uid)
+
 
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)

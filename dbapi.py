@@ -198,6 +198,13 @@ def add_question_repl_cond(qid: int):
 
     execute(my_query)
 
+def add_question_isseen_cond(uid: int):
+    def my_query(cursor):
+        query = f"""UPDATE questions SET isseen = 1 WHERE uid = {uid}"""
+        cursor.execute(query)
+
+    execute(my_query)
+
 
 def add_registration(eid: int, uid: int):
     def my_query(cursor):
