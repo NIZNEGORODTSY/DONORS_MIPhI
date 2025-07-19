@@ -14,8 +14,12 @@ from keybord.admin import get_organizer_keyboard
 # Настройка логирования
 
 TOKEN = reader.get_param_value('token')
-ADMINS = get_admins()
-ADMINS = ''
+data = get_admins()
+ADMINS = []
+
+for el in data:
+    ADMINS.append(el.Tgid)
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
