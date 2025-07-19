@@ -30,6 +30,7 @@ class Donation:
     def __init__(self):
         pass
 
+
 class Question:
     Id: int
     Uid: int
@@ -38,6 +39,7 @@ class Question:
     def __init__(self):
         pass
 
+
 class UpcomingEvent:
     Id: int
     DonPlace: str
@@ -45,6 +47,7 @@ class UpcomingEvent:
 
     def __init__(self):
         pass
+
 
 class InfoTypes:
     DonationMEPHI = 0
