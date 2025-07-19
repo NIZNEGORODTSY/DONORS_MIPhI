@@ -1,10 +1,11 @@
 from aiogram import types, F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, FSInputFile
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 import pandas as pd
 import io
+import os
 
 from keybord.admin import get_broadcast_categories_keyboard
 from keybord.admin import get_info_sections_keyboard
@@ -12,7 +13,7 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
-from core import add_donor, add_question_ans, get_donor
+from core import add_donor, add_question_ans, get_donor, export_excel
 from dbapi import get_all_questions
 
 from keybord.user import choose_group
@@ -195,6 +196,28 @@ async def process_broadcast_message(message: Message, state: FSMContext):
 
 @dp.message(F.text == "Скачать статистику")
 async def edit_info_start(message: Message, state: FSMContext):
+    export_excel()
+    file_path_1 = "export/questions.xlsx"
+    file_path_2 = "export/upcoming_events.xlsx"
+    
+    if not os.path.exists(file_path_1):
+        await message.answer("Файл не найден")
+        return
+    
+    file = FSInputFile(file_path_1)
+    await message.answer_document(
+        document=file,
+        caption="Ежемесячный отчет"
+    )
+    if not os.path.exists(file_path_2):
+        await message.answer("Файл не найден")
+        return
+    
+    file = FSInputFile(file_path_2)
+    await message.answer_document(
+        document=file,
+        caption="Ежемесячный отчет"
+    )
     await message.answer("Вы получили все файлы, который храняться на сервере")
 
 
