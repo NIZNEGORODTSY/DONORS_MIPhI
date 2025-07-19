@@ -161,3 +161,20 @@ def add_donor(fio: str, ugroup: str, registry: str):
         cursor.execute(query)
 
     execute(my_query)
+
+def add_question(uid: int, question: str):
+    def my_query(cursor):
+        query = f"""INSERT INTO users (uid, question) VALUES ({uid}, '{question}')"""
+        cursor.execute(query)
+
+    execute(my_query)
+
+def get_all_questions() -> list:
+    def my_query(cursor):
+        query = f"""SLECT * FROM questions"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+    execute(my_query)

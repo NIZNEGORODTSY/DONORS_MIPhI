@@ -30,6 +30,14 @@ class Donation:
     def __init__(self):
         pass
 
+class Question:
+    Id: int
+    Uid: int
+    QuestionMsg: str
+
+    def __init__(self):
+        pass
+
 class InfoTypes:
     DonationMEPHI = 0
     DonationProcedure = 1
