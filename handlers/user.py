@@ -172,7 +172,6 @@ async def waiting_for_date(message: Message, state: FSMContext):
     chose = message.text
     if chose.isdigit() and 1 <= int(chose) <= max_id:
         res = ''
-        MAX = 0
         for event in data:
             if event.Id == int(chose):
                 res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
@@ -181,6 +180,7 @@ async def waiting_for_date(message: Message, state: FSMContext):
         add_registration(chose, uid)
         await message.answer(f"Вы записаны✅", reply_markup=get_main_menu_keyboard())
         # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
+        await state.clear()
     else:
         await message.answer('Проверьте правильность введённых данных')
 
@@ -201,7 +201,7 @@ async def info_about_donation(message: Message, state: FSMContext):
     await message.answer(get_restrictions(f"{text}"))
 
 
-@dp.message(F.text == "🌤 Рекомендации для доноров на сегодня")
+@dp.message(F.text == "🌤 Погодные советы")
 async def show_information(message: Message, state: FSMContext):
     advice = generate_donor_advice(get_daily_weather())
     weather = display_weather(get_daily_weather())
@@ -227,14 +227,16 @@ async def waiting_for_questions(message: Message, state: FSMContext):
 
 @dp.message(F.text == "Ответы на ваши вопросы")
 async def show_profile(message: Message, state: FSMContext):
-    #Возвращает 408,409
+    # Возвращает 408,409
     y = get_questions_by_user(get_user(message.from_user.id).Id)
-    k=1
+    k = 1
     for i in y:
         if (i.HasReply == 1) and (i.IsSeen == 0):
-            await message.answer(str(k)+"\n"+i.Answer, reply_markup=get_main_menu_keyboard())
-            k+=1
-            #print(get_question(x).Id, get_question(x).Uid, get_question(x).QuestionMsg, get_question(x).HasReply, get_question(x).IsSeen, get_question(x).Answer)
+            await message.answer(str(k) + ")" + "\n" + i.Answer, reply_markup=get_main_menu_keyboard())
+            k += 1
+    if k == 1:
+        await message.answer("Вы получили ответы на все вопросы.")
+        # print(get_question(x).Id, get_question(x).Uid, get_question(x).QuestionMsg, get_question(x).HasReply, get_question(x).IsSeen, get_question(x).Answer)
     await state.clear()
 
 
