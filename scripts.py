@@ -158,44 +158,50 @@ def get_restrictions(requirements):
         filename = 'messages/donation_procedure.txt'
     elif requirements == 'Процедура сдачи крови в МИФИ':
         filename = 'messages/donation_mephi.txt'
+    else:
+        return "Неизвестный запрос"
+    
     try:
         with open(filename, 'r', encoding='utf-8') as file:
             current_section = ""
-
+            output = []
+            
             for line in file:
                 line = line.strip()
                 if not line:
                     continue
-
+                
                 # Обработка секций
                 if line.startswith("! "):
                     current_section = line[2:].strip()
-                    return f"\n{current_section.upper()}"  # Цветной заголовок
-                    return f"" + "―" * 60 + ""  # Серый разделитель
-
+                    output.append(f"\n{current_section.upper()}\n")
+                    output.append("―" * 60 + "\n")
+                
                 # Обработка основных пунктов
                 elif line.startswith("-> "):
                     item = line[3:].strip()
                     # Разделение на описание и детали (если есть разделитель '-')
                     if " - " in item:
                         desc, details = item.split(" - ", 1)
-                        return f" \033[1m• {desc.strip()}\033[0m — {details.strip()}"
+                        output.append(f" • {desc.strip()} — {details.strip()}\n")
                     else:
-                        return f" \033[1m• {item}\033[0m"
-
+                        output.append(f" • {item}\n")
+                
                 # Обработка подпунктов
                 elif line.startswith("--> "):
                     subitem = line[4:].strip()
-                    return f"    ◦ {subitem}"
-
+                    output.append(f"    ◦ {subitem}\n")
+                
                 # Обработка обычного текста (если есть)
                 else:
-                    return f"  {line}"
-
+                    output.append(f"  {line}\n")
+            
+            return "".join(output).strip()
+    
     except FileNotFoundError:
-        return f"\n\033[1;31mФайл {filename} не найден\033[0m\n"
+        return f"Файл {filename} не найден"
     except Exception as e:
-        return f"\n\033[1;31mОшибка при обработке файла: {e}\033[0m\n"
+        return f"Ошибка при обработке файла: {e}"
 
 
 get_restrictions('Подготовка к донации (за 2-3 дня)')
