@@ -137,3 +137,65 @@ def display_weather(data):
     f"Осадки: {current.get('precipitation')} мм\n"
 
     return res
+
+def get_restrictions(requirements):
+    if requirements == 'Требования к донорам':
+        filename = 'messages/donation_mephi.txt'
+    elif requirements == 'Подготовка к донации (за 2-3 дня)':
+        filename = 'messages/donor_preparation.txt'
+    elif requirements == 'Рацион донора за 2-3 дня до донации':
+        filename = 'messages/donor_diet.txt'
+    elif requirements == 'Абсолютные противопоказания':
+        filename = 'messages/donor_abs_contraindications.txt'
+    elif requirements == 'Временные противопоказания':
+        filename = 'messages/donor_temp_contraindications.txt'
+    elif requirements == 'Важность донорства костного мозга':
+        filename = 'messages/donor_importance.txt'
+    elif requirements == 'Процедура вступления в регистр доноров костного мозга':
+        filename = 'messages/donor_join_registry.txt'
+    elif requirements == 'Процедура донации':
+        filename = 'messages/donation_procedure.txt'
+    elif requirements == 'Процедура сдачи крови в МИФИ':
+        filename = 'messages/donation_mephi.txt' 
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            current_section = ""
+            
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue
+                
+                # Обработка секций
+                if line.startswith("! "):
+                    current_section = line[2:].strip()
+                    print(f"\n\033[1;36m{current_section.upper()}\033[0m")  # Цветной заголовок
+                    print("\033[90m" + "―" * 60 + "\033[0m")  # Серый разделитель
+                
+                # Обработка основных пунктов
+                elif line.startswith("-> "):
+                    item = line[3:].strip()
+                    # Разделение на описание и детали (если есть разделитель '-')
+                    if " - " in item:
+                        desc, details = item.split(" - ", 1)
+                        print(f" \033[1m• {desc.strip()}\033[0m — {details.strip()}")
+                    else:
+                        print(f" \033[1m• {item}\033[0m")
+                
+                # Обработка подпунктов
+                elif line.startswith("--> "):
+                    subitem = line[4:].strip()
+                    print(f"    ◦ {subitem}")
+                
+                # Обработка обычного текста (если есть)
+                else:
+                    print(f"  {line}")
+    
+    except FileNotFoundError:
+        print(f"\n\033[1;31mФайл {filename} не найден\033[0m\n")
+    except Exception as e:
+        print(f"\n\033[1;31mОшибка при обработке файла: {e}\033[0m\n")
+
+
+
+get_restrictions('Подготовка к донации (за 2-3 дня)')

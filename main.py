@@ -22,7 +22,6 @@ ADMINS = []
 for el in data:
     ADMINS.append(el.Tgid)
 
-ADMINS = get_admins()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -39,7 +38,6 @@ dop = Dispatcher()
 @dop.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
     if str(message.from_user.id) in ADMINS:
-
         await message.answer("Добро пожаловать в панель организатора!", reply_markup=get_organizer_keyboard())
     else:
 
