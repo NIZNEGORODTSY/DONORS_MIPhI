@@ -144,17 +144,17 @@ def display_weather(data):
 def get_restrictions(requirements):
     if requirements == 'Требования к донорам':
         filename = 'messages/donation_mephi.txt'
-    elif requirements == 'Подготовка к донации (за 2-3 дня)':
+    elif requirements == 'Подготовка к донации':
         filename = 'messages/donor_preparation.txt'
-    elif requirements == 'Рацион донора за 2-3 дня до донации':
+    elif requirements == 'Рацион донора':
         filename = 'messages/donor_diet.txt'
     elif requirements == 'Абсолютные противопоказания':
         filename = 'messages/donor_abs_contraindications.txt'
     elif requirements == 'Временные противопоказания':
         filename = 'messages/donor_temp_contraindications.txt'
-    elif requirements == 'Важность донорства костного мозга':
+    elif requirements == 'Важность ДКМ':
         filename = 'messages/donor_importance.txt'
-    elif requirements == 'Процедура вступления в регистр доноров костного мозга':
+    elif requirements == 'Как вступить в регистр ДКМ':
         filename = 'messages/donor_join_registry.txt'
     elif requirements == 'Процедура донации':
         filename = 'messages/donation_procedure.txt'
