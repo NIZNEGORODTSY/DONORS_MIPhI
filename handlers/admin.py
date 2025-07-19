@@ -28,9 +28,6 @@ class DonorForm(StatesGroup):
     uggroup = State()
     student_group = State()
     event_date = State()
-    blood_center = State()
-    donated_blood = State()
-    donated_tube = State()
 
 
 class EventForm(StatesGroup):
