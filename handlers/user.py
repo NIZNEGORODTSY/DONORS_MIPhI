@@ -8,7 +8,7 @@ from aiogram.enums import ParseMode
 
 from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard
 
-from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question
+from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question, get_upcoming_events
 
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
     get_daily_weather, display_weather
@@ -37,6 +37,10 @@ class Questions(StatesGroup):
     waiting_for_question = State()
 
 
+class SignUpForDonation(StatesGroup):
+    waiting_for_date = State()
+
+
 @dp.message(F.text == '🔐Аутентификация')
 async def authorization(message: Message, state: FSMContext):
     await message.answer("Введите ваш номер телефона...", reply_markup=get_phone_number_keyboard())
@@ -46,6 +50,7 @@ async def authorization(message: Message, state: FSMContext):
 @dp.message(AuthState.waiting_for_phone)  # Хэндлер для состояния
 async def process_phone(message: Message, state: FSMContext):
     phone_number = message.contact.phone_number
+    # phone_number = '+7 934 324 5456'
     if is_valid_russian_phone(phone_number):
         # res = check_admin(message.from_user.id)
         res = check_user_by_phone(phone_number)
@@ -113,7 +118,7 @@ async def define_group(message: Message, state: FSMContext):
 async def student_group(message: Message, state: FSMContext):
     text = message.text
     add_ugroup(message.from_user.id, text)
-    await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
+    await message.answer("Поздравляем! Теперь вы можете спасать жизни!", reply_markup=get_main_menu_keyboard())
     await state.clear()
 
 
@@ -131,6 +136,36 @@ async def show_profile(message: Message, state: FSMContext):
 <b>Регистрация в регистре ДМК:</b> {name.Registry}
 <b>История донаций:</b> 
 {display_history(history)}""", parse_mode=ParseMode.HTML)
+    await state.clear()
+
+
+@dp.message(F.text == "📅 Записаться на донацию")
+async def sign_up_for_donation(message: Message, state: FSMContext):
+    await message.answer("Выберите дату и место, указав номер события из списка.")
+    data = get_upcoming_events()
+    events = ''
+    for event in data:
+        events += f'{event.Id})Место: {event.DonPlace}, дата и время: {event.DonDate}.\n'
+    await message.answer(events)
+
+    await state.set_state(SignUpForDonation.waiting_for_date)
+
+
+@dp.message(SignUpForDonation.waiting_for_date)
+async def waiting_for_date(message: Message, state: FSMContext):
+    chose = message.text
+    data = get_upcoming_events()
+    res = ''
+    for event in data:
+        if event.Id == int(chose):
+            res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
+    await message.answer(f"Вы выбрали:\n{res}")
+    # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
+
+
+@dp.message(F.text == "ℹ️ Информация о донорстве")
+async def info_about_donation(message: Message, state: FSMContext):
+    await message.answer()
     await state.clear()
 
 
@@ -154,7 +189,8 @@ async def waiting_for_questions(message: Message, state: FSMContext):
     uid = get_user(message.from_user.id).Id
     add_question(uid, question)
     await state.clear()
-    await message.answer("Спасибо за вопрос! Наши админы ответят в ближайшее время.")
+    await message.answer("Спасибо за вопрос! Наши админы ответят в ближайшее время.",
+                         reply_markup=get_main_menu_keyboard())
 
 
 @dp.message(Command('menu'))
