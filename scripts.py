@@ -19,7 +19,7 @@ def compare_date(date1: datetime.date, date2: datetime.date):
             else:
                 return date2, 'Центр Крови ФМБА'
     except Exception:
-        return 0, Exception
+        return 0, '-'
 
 
 def display_history(data):
@@ -31,6 +31,8 @@ def display_history(data):
         place = donation.DonPlace
         number = cnt + 1
         res += f"{number}: {date}, {places[place]}\n"
+    if res == '':
+        return 'История пуста'
     return res
 
 
