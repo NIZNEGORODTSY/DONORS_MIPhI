@@ -14,18 +14,13 @@ from keybord.admin import get_organizer_keyboard
 # Настройка логирования
 
 TOKEN = reader.get_param_value('token')
-<<<<<<< Updated upstream
 data = get_admins()
 ADMINS = []
 
 for el in data:
     ADMINS.append(el.Tgid)
-=======
+
 ADMINS = get_admins()
-
-
->>>>>>> Stashed changes
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
