@@ -8,7 +8,7 @@ from aiogram.enums import ParseMode
 
 from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard
 
-from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup
+from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question
 
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
     get_daily_weather, display_weather
@@ -144,13 +144,17 @@ async def show_information(message: Message, state: FSMContext):
 
 @dp.message(F.text == "❓ Задать вопрос")
 async def show_information(message: Message, state: FSMContext):
-    await message.answer("Напишите ваш вопрос")
+    await message.answer("Напишите ваш вопрос.")
     await state.set_state(Questions.waiting_for_question)
 
 
 @dp.message(Questions.waiting_for_question)
 async def waiting_for_questions(message: Message, state: FSMContext):
     question = message.text
+    uid = get_user(message.from_user.id).Id
+    add_question(uid, question)
+    await state.clear()
+    await message.answer("Спасибо за вопрос! Наши админы ответят в ближайшее время.")
 
 
 @dp.message(Command('menu'))
