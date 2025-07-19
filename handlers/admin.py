@@ -165,7 +165,7 @@ async def process_answer(message: Message, state: FSMContext):
     data = await state.get_data()
     id_q = data['id_q']
     add_question_ans(id_q, text)
-    await message.answer("Ответ на вопрос записан")
+    await message.answer("Ответ на вопрос записан", reply_markup=get_organizer_keyboard())
     await state.clear()
 
 
