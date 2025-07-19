@@ -51,14 +51,18 @@ def validate_full_name(full_name):
     return True
 
 
+# Координаты Москвы
+LATITUDE = 55.7558
+LONGITUDE = 37.6176
+
+
 def get_daily_weather():
-    LATITUDE, LONGITUDE = 0, 0
     """Получает погоду в Москве на сегодня."""
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": LATITUDE,
         "longitude": LONGITUDE,
-        "current": "temperature_2m,relative_humidity_2m",
+        "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
         "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum",
         "timezone": "Europe/Moscow",
         "forecast_days": 1
@@ -73,7 +77,7 @@ def get_daily_weather():
     return response.json()
 
 
-def generate_donor_advice(weather_data) -> str:
+def generate_donor_advice(weather_data):
     """Генерирует персонализированные советы для доноров на основе погоды."""
     if not weather_data:
         return "Не удалось получить данные о погоде. Пожалуйста, следуйте общим рекомендациям."
@@ -126,10 +130,10 @@ def display_weather(data):
         return
 
     current = data.get("current", {})
-    print("\n=== Погода в Москве на сегодня ===")
-    print(f"Температура: {current.get('temperature_2m')}°C")
-    print(f"Влажность: {current.get('relative_humidity_2m')}%")
-    print(f"Ветер: {current.get('wind_speed_10m')} км/ч")
-    print(f"Осадки: {current.get('precipitation')} мм")
+    res = f"\n=== Погода в Москве на сегодня ===\n" \
+          f"Температура: {current.get('temperature_2m')}°C\n"
+    f"Влажность: {current.get('relative_humidity_2m')}%\n"
+    f"Ветер: {current.get('wind_speed_10m')} км/ч\n"
+    f"Осадки: {current.get('precipitation')} мм\n"
 
-    print("\n" + generate_donor_advice(data))
+    return res

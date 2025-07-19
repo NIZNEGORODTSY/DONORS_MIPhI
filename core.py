@@ -17,7 +17,7 @@ def check_user_by_phone(phone_number: str) -> bool:
 
 def check_admin(tgid: int) -> bool:
     res = dbapi.get_admin(tgid)
-    return res[0] == 1  # Здесь всё время крашится код
+    return res[0] == 1
 
 
 def add_user(phone_number: str, tgid: int):
@@ -29,7 +29,7 @@ def add_fio(tgid: int, fio: str):
 
 
 def add_ugroup(tgid: int, ugroup: str):
-    dbapi.add_ugroup(tgid, ugroup)
+    return dbapi.add_ugroup(tgid, ugroup)
 
 
 def add_contacts(tgid: int, contacts: str):
@@ -84,6 +84,32 @@ def get_user_history(uid: int) -> list[Donation]:
     return res
 
 
+def get_admins() -> list[User]:
+    ans = dbapi.get_admins()
+
+    res = []
+
+    for u in ans:
+        adm = User()
+        adm.Id = u[0]
+        adm.Fio = u[1]
+        adm.Group = u[2]
+        adm.CountGavr = u[3]
+        adm.CountFMBA = u[4]
+        adm.SumCount = u[5]
+        adm.LastGavr = u[6]
+        adm.LastFMBA = u[7]
+        adm.Contacts = u[8]
+        adm.PhoneNumber = u[9]
+        adm.IsAdmin = u[10]
+        adm.Registry = u[11]
+        adm.Tgid = u[12]
+
+        res.append(adm)
+
+    return res
+
+
 def get_info_message(info_type: int) -> str:
     if info_type == InfoTypes.DonationMEPHI:
         filepath = 'donation_mephi'
@@ -108,3 +134,6 @@ def get_info_message(info_type: int) -> str:
         res = f.read()
 
     return res
+
+
+get_admins()
