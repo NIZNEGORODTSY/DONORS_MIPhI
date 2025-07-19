@@ -160,6 +160,7 @@ async def waiting_for_date(message: Message, state: FSMContext):
         if event.Id == int(chose):
             res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
     await message.answer(f"Вы выбрали:\n{res}")
+    # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
 
 
 @dp.message(F.text == "ℹ️ Информация о донорстве")
