@@ -83,7 +83,7 @@ def add_ugroup(tgid: int, ugroup: str) -> int:
     def my_query(cursor):
         query = f"""UPDATE users SET ugroup = '{ugroup}' WHERE tgid = '{tgid}'"""
         cursor.execute(query)
-        cursor.fetchone()
+
     execute(my_query)
 
 

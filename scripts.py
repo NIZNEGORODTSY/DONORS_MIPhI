@@ -50,18 +50,9 @@ def validate_full_name(full_name):
 
     return True
 
-def get_location_by_ip():
-    try:
-        response = requests.get('https://ipinfo.io/json')
-        data = response.json()
-        loc = data.get('loc', 'N/A')
-        return loc
-    except Exception as e:
-        print(f"Ошибка: {e}")
-
 
 def get_daily_weather():
-    LATITUDE, LONGITUDE = get_location_by_ip()
+    LATITUDE, LONGITUDE = 0, 0
     """Получает погоду в Москве на сегодня."""
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
