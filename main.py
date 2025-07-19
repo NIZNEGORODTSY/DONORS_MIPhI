@@ -13,7 +13,8 @@ from keybord.admin import get_organizer_keyboard
 # Настройка логирования
 
 BOT_TOKEN = reader.get_param_value('token')
-ADMINS = get_admins()
+#ADMINS = get_admins()
+ADMINS = ''
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +31,6 @@ dop = Dispatcher()
 @dop.message(Command("start"))
 async def cmd_start(message: Message, state: FSMContext):
     if str(message.from_user.id) in ADMINS:
-        
         await message.answer("Добро пожаловать в панель организатора!", reply_markup=get_organizer_keyboard())
     else:
         
@@ -75,6 +75,7 @@ async def main():
     dop.include_routers(admin.dp)
     dop.include_routers(user.dp)
     await dop.start_polling(bot)
+    
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
