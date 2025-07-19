@@ -237,7 +237,7 @@ async def process_info_section(message: Message, state: FSMContext):
     x = get_donor(text)
     print(x)
     await message.answer("Скопируйте данные и измените их")
-    """###await message.answer(str(x.Id)+'\n'
+    await message.answer(str(x.Id)+'\n'
                          +str(x.Fio)+'\n'
                          +str(x.Group)+'\n'
                          +str(x.CountGavr)+'\n'
@@ -249,7 +249,7 @@ async def process_info_section(message: Message, state: FSMContext):
                          +str(x.PhoneNumber)+'\n'
                          +str(x.IsAdmin)+'\n'
                          +str(x.Registry)+'\n'
-                         +str(x.Tgid)+'\n')"""
+                         +str(x.Tgid)+'\n')
     await state.set_state(EditInfoForm.new_text)
 
 

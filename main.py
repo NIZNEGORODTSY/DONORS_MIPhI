@@ -18,6 +18,8 @@ TOKEN = reader.get_param_value('token')
 data = get_admins()
 ADMINS = []
 
+print(ADMINS)
+
 for el in data:
     ADMINS.append(el.Tgid)
 

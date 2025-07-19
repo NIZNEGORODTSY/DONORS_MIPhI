@@ -240,8 +240,8 @@ def get_all_donations() -> list[Donation]:
     return res
 
 
-def get_donor(phone_number: int) -> User:
-    ans = dbapi.get_user(phone_number)
+def get_donor(phone_number: str) -> User:
+    ans = dbapi.get_donor(phone_number)
 
     res = User()
     res.Id = ans[0][0]
