@@ -11,6 +11,7 @@ def get_organizer_keyboard():
     builder.add(KeyboardButton(text="📢 Рассылка"))
     builder.add(KeyboardButton(text="📄 Редактировать информацию о доноре"))
     builder.add(KeyboardButton(text="📁 Загрузить статистику"))
+    builder.add(KeyboardButton(text="Скачать статистику"))
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
 
