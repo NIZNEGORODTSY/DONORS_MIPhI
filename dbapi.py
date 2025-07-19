@@ -175,7 +175,7 @@ def add_question(uid: int, question: str):
 
 def get_all_questions() -> list:
     def my_query(cursor):
-        query = f"""SLECT * FROM questions"""
+        query = f"""SELECT * FROM questions"""
         cursor.execute(query)
         return cursor.fetchall()
 

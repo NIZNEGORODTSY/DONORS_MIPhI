@@ -171,4 +171,4 @@ def get_upcoming_events() -> list[UpcomingEvent]:
         res.append(event)
     return res
 
-get_admins()
+get_all_questions()
