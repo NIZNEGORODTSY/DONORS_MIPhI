@@ -16,6 +16,7 @@ from keybord.admin import get_organizer_keyboard
 
 TOKEN = reader.get_param_value('token')
 ADMINS = get_admins()
+print(ADMINS)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -73,6 +74,7 @@ async def main():
     dop.include_routers(admin.dp)
     dop.include_routers(user.dp)
     await dop.start_polling(bot)
+    
 if __name__ == "__main__":
     import asyncio
 
