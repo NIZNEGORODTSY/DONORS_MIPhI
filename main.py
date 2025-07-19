@@ -10,10 +10,12 @@ from handlers import admin, user
 
 from core import get_admins
 from keybord.admin import get_organizer_keyboard
+from keybord.user import get_auth_keyboard
 
 # Настройка логирования
 
 TOKEN = reader.get_param_value('token')
+#TOKEN = "8195479409:AAFfZj3V05P5bZD0rCwwWF_a80nX6NObsa4"
 data = get_admins()
 ADMINS = []
 
@@ -69,7 +71,7 @@ async def cmd_start(message: Message, state: FSMContext):
         await bot.set_my_commands([
             BotCommand(command='start', description='Приветствие')
         ])
-        await message.answer("Давайте начнём! Для регистрации нажмите /authenticate или выбери раздел в меню ↓")
+        await message.answer("Давайте начнём!", reply_markup=get_auth_keyboard())
 
 
 async def main():
