@@ -90,19 +90,23 @@ def get_admins() -> list[User]:
 
     for u in ans:
         adm = User()
-        adm.Id = u[0][0]
-        adm.Fio = u[0][1]
-        adm.Group = u[0][2]
-        adm.CountGavr = u[0][3]
-        adm.CountFMBA = u[0][4]
-        adm.SumCount = u[0][5]
-        adm.LastGavr = u[0][6]
-        adm.LastFMBA = u[0][7]
-        adm.Contacts = u[0][8]
-        adm.PhoneNumber = u[0][9]
-        adm.IsAdmin = u[0][10]
-        adm.Registry = u[0][11]
-        adm.Tgid = u[0][12]
+        adm.Id = u[0]
+        adm.Fio = u[1]
+        adm.Group = u[2]
+        adm.CountGavr = u[3]
+        adm.CountFMBA = u[4]
+        adm.SumCount = u[5]
+        adm.LastGavr = u[6]
+        adm.LastFMBA = u[7]
+        adm.Contacts = u[8]
+        adm.PhoneNumber = u[9]
+        adm.IsAdmin = u[10]
+        adm.Registry = u[11]
+        adm.Tgid = u[12]
+
+        res.append(adm)
+        
+    return res
 
 
 def get_info_message(info_type: int) -> str:
@@ -131,4 +135,4 @@ def get_info_message(info_type: int) -> str:
     return res
     
 
-get_user_history(408)
+get_admins()
