@@ -311,4 +311,4 @@ def export_excel() -> None:
 
     df_q.to_excel('export/questions.xlsx')
 
-export_excel()
+get_donor('+79159474413')

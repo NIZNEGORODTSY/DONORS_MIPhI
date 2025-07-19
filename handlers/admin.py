@@ -13,7 +13,7 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
-from core import add_donor, add_question_ans, get_donor, export_excel
+from core import add_donor, add_question_ans, get_donor, export_excel, edit_donor
 from dbapi import get_all_questions
 
 from keybord.user import choose_group
@@ -237,19 +237,19 @@ async def process_info_section(message: Message, state: FSMContext):
     x = get_donor(text)
     print(x)
     await message.answer("Скопируйте данные и измените их")
-    await message.answer(str(x.Id)+'\n'
-                         +str(x.Fio)+'\n'
-                         +str(x.Group)+'\n'
-                         +str(x.CountGavr)+'\n'
-                         +str(x.CountFMBA)+'\n'
-                         +str(x.SumCount)+'\n'
-                         +str(x.LastGavr)+'\n'
-                         +str(x.LastFMBA)+'\n'
-                         +str(x.Contacts)+'\n'
-                         +str(x.PhoneNumber)+'\n'
-                         +str(x.IsAdmin)+'\n'
-                         +str(x.Registry)+'\n'
-                         +str(x.Tgid)+'\n')
+    await message.answer("id:"+str(x.Id)+'\n'
+                         "fio:"+str(x.Fio)+'\n'
+                         "ugroup:"+str(x.Group)+'\n'
+                         "countgavr:"+str(x.CountGavr)+'\n'
+                         "countfmba:"+str(x.CountFMBA)+'\n'
+                         "sumcount:"+str(x.SumCount)+'\n'
+                         "lastgavr:"+str(x.LastGavr)+'\n'
+                         "lastfmba:"+str(x.LastFMBA)+'\n'
+                         "contacts:"+str(x.Contacts)+'\n'
+                         "phonenumber:"+str(x.PhoneNumber)+'\n'
+                         "isadmin:"+str(x.IsAdmin)+'\n'
+                         "registry:"+str(x.Registry)+'\n'
+                         "tgid:"+str(x.Tgid)+'\n')
     await state.set_state(EditInfoForm.new_text)
 
 
@@ -257,7 +257,13 @@ async def process_info_section(message: Message, state: FSMContext):
 async def process_new_info_text(message: Message, state: FSMContext):
     text=message.text
     print(text)
-    # Здесь должен быть код для сохранения новой информации
+    d = {}
+    for row in text.split('\n'):
+        t = row.split(':')
+        key = t[0]
+        val = t[1]
+        d[key] = val
+    edit_donor(d, d['phonenumber'])
     await message.answer(f"Профиль успешно обновлен!", reply_markup=get_organizer_keyboard())
     await state.clear()
 

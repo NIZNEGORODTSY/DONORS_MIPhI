@@ -222,6 +222,7 @@ def get_all_users() -> list:
 def get_donor(phone_number: str) -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM users WHERE phonenumber = '{phone_number}'"""
+        print(query)
         cursor.execute(query)
         return cursor.fetchall()
 
@@ -232,7 +233,7 @@ def get_donor(phone_number: str) -> list:
 def edit_donor(rules: dict, phone_number: str):
     def my_query(cursor):
         for key, value in rules.items():
-            query = f"""UPDATE users SET '{key}' = '{value}' WHERE phonenumber = '{phone_number}'"""
+            query = f"""UPDATE users SET {key} = '{value}' WHERE phonenumber = '{phone_number}'"""
             cursor.execute(query)
 
     execute(my_query)
@@ -271,12 +272,3 @@ def get_all_donations() -> list:
     res = execute(my_query)
     return res
 
-
-def get_donor(phone_number: int) -> list:
-    def my_query(cursor):
-        query = f"""SELECT * FROM users WHERE tgid = '{phone_number}'"""
-        cursor.execute(query)
-        return cursor.fetchall()
-
-    res = execute(my_query)
-    return res
