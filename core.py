@@ -180,6 +180,7 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
     dbapi.add_question_repl_cond(qid)
+    
 
 
 def add_registration(eid: int, uid: int):
@@ -217,6 +218,7 @@ def export_excel() -> None:
     upcoming_events = get_upcoming_events()
     questions = get_all_questions()
     users = get_all_users()
+    registrations = get_all_registations()
 
 
 def get_donor(phone_number: int) -> User:
@@ -240,18 +242,24 @@ def get_donor(phone_number: int) -> User:
     return res
 
 
-def get_question(uid: int) -> Question:
-    q = dbapi.get_question(uid)
+def get_questions_by_user(uid: int) -> list[Question]:
+    ans = dbapi.get_questions_by_user(uid)
 
-    question = Question()
-    question.Id = q[0][0]
-    question.Uid = q[0][1]
-    question.QuestionMsg = q[0][2]
-    question.HasReply = q[0][3]
-    question.IsSeen = q[0][4]
-    question.Answer = q[0][5]
+    res = []
 
-    return question
+    for q in ans:
+        question = Question()
+        question.Id = q[0]
+        question.Uid = q[1]
+        question.QuestionMsg = q[2]
+        question.HasReply = q[3]
+        question.IsSeen = q[4]
+        question.Answer = q[5]
+        res.append(question)
+
+    dbapi.add_question_isseen_cond(uid)
+
+    return res
 
 
 def edit_donor(rules: dict, phone_number: str):
