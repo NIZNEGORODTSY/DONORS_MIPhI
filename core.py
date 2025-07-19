@@ -128,6 +128,9 @@ def get_all_questions() -> list[Question]:
         question.Id = q[0]
         question.Uid = q[1]
         question.QuestionMsg = q[2]
+        question.HasReply = q[3] == 1
+        question.IsSeen = q[4] == 1
+        question.Answer = q[5]
         res.append(question)
 
     return res
@@ -165,10 +168,10 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 
     for e in ans:
         event = UpcomingEvent()
-        event.Id = e[0]
-        event.DonPlace = e[1]
-        event.DonDate = e[2]
+        event.Id = e[2]
+        event.DonPlace = e[0]
+        event.DonDate = e[1]
         res.append(event)
     return res
 
-get_admins()
+get_all_questions()

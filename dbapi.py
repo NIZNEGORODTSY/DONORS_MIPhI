@@ -167,7 +167,7 @@ def add_donor(fio: str, ugroup: str, registry: str):
 
 def add_question(uid: int, question: str):
     def my_query(cursor):
-        query = f"""INSERT INTO questions (uid, question) VALUES ({uid}, '{question}')"""
+        query = f"""INSERT INTO questions (uid, question, hasreply, isseen) VALUES ({uid}, '{question}', 0, 0)"""
         cursor.execute(query)
 
     execute(my_query)
@@ -175,7 +175,7 @@ def add_question(uid: int, question: str):
 
 def get_all_questions() -> list:
     def my_query(cursor):
-        query = f"""SLECT * FROM questions"""
+        query = f"""SELECT * FROM questions"""
         cursor.execute(query)
         return cursor.fetchall()
 
