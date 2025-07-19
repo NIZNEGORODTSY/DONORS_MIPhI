@@ -1,5 +1,6 @@
 import dbapi
 from objects import *
+import pandas as pd # для экспорта
 
 
 def get_uid(tgid: int) -> int:
@@ -176,9 +177,37 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
-    dbapi.add_question_repl_cond()
+    dbapi.add_question_repl_cond(qid)
 
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)
 
-get_all_questions()
+def get_all_users() -> list[User]:
+    ans = dbapi.get_all_users()
+
+    res = []
+
+    for u in ans:
+        user = User()
+        user.Id = u[0]
+        user.Fio = u[1]
+        user.Group = u[2]
+        user.CountGavr = u[3]
+        user.CountFMBA = u[4]
+        user.SumCount = u[5]
+        user.LastGavr = u[6]
+        user.LastFMBA = u[7]
+        user.Contacts = u[8]
+        user.PhoneNumber = u[9]
+        user.IsAdmin = u[10]
+
+        res.append(user)
+    return res
+
+def get_all_registations() -> list[Registration]:
+    pass
+
+def export_excel() -> None:
+    upcoming_events = get_upcoming_events()
+    questions = get_all_questions()
+    users = get_all_users()

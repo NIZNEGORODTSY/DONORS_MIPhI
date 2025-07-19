@@ -37,7 +37,7 @@ class Question:
     QuestionMsg: str
     HasReply: bool
     IsSeen: bool
-    Answer: str | None
+    Answer: Optional[str] = None
 
     def __init__(self):
         pass
@@ -47,6 +47,14 @@ class UpcomingEvent:
     Id: int
     DonPlace: str
     DonDate: datetime.date
+
+    def __init__(self):
+        pass
+
+class Registration:
+    Id: int
+    Eid: int
+    Uid: int
 
     def __init__(self):
         pass

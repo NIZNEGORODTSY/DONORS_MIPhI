@@ -12,7 +12,7 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
-from core import add_donor, add_question
+from core import add_donor, add_question_ans
 from dbapi import get_all_questions
 
 from keybord.user import choose_group
@@ -147,13 +147,15 @@ async def process_answer(message: Message, state: FSMContext):
     text = message.text
     k=1
     for i in get_all_questions():
-        print(i)
-        if i[3]==False:
-            if k == text:
+        print(i,k)
+        if i[3]==0:
+            if str(k) == text:
+                print("eee")
                 await message.answer(str(i[2])+ "\nВведите ответ:")
+                break
             else:
                 k+=1
-        break 
+    
     await state.update_data(id_q=str(i[0]))
     await state.set_state(AnswerForm.question_id)
 
@@ -162,8 +164,8 @@ async def process_answer(message: Message, state: FSMContext):
     text = message.text
     data = await state.get_data()
     id_q = data['id_q']
-    add_question(id_q, text)
-    await message.answer("Ответ на вопрос записан")
+    add_question_ans(id_q, text)
+    await message.answer("Ответ на вопрос записан", reply_markup=get_organizer_keyboard())
     await state.clear()
 
 
