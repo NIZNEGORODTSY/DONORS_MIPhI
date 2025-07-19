@@ -2,7 +2,6 @@ from aiogram.types import KeyboardButton
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-
 def get_consent_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
@@ -32,6 +31,25 @@ def get_main_menu_keyboard():
             [KeyboardButton(text="ℹ️ Информация о донорстве")],
             [KeyboardButton(text="🌤 Рекомендации для доноров на сегодня")],
             [KeyboardButton(text="❓ Задать вопрос")]
+        ],
+        resize_keyboard=True
+    )
+
+
+def get_auth_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🔐Аутентификация")]
+        ],
+        resize_keyboard=True
+    )
+
+
+def get_phone_number_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📱Поделиться номером",
+                            request_contact=True)]
         ],
         resize_keyboard=True
     )

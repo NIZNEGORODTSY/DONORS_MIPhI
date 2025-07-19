@@ -6,11 +6,13 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 
-from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group
+from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard
 
 from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup
 
-from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, get_daily_weather, display_weather
+from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
+    get_daily_weather, display_weather
+
 
 dp = Router()
 
@@ -32,15 +34,15 @@ class InfoState(StatesGroup):
     main_state = State()
 
 
-@dp.message(Command('authenticate'))
+@dp.message(F.text == '🔐Аутентификация')
 async def authorization(message: Message, state: FSMContext):
-    await message.answer("Введите ваш номер телефона...")
+    await message.answer("Введите ваш номер телефона...", reply_markup=get_phone_number_keyboard())
     await state.set_state(AuthState.waiting_for_phone)
 
 
 @dp.message(AuthState.waiting_for_phone)  # Хэндлер для состояния
 async def process_phone(message: Message, state: FSMContext):
-    phone_number = message.text  # Получаем введённый номер
+    phone_number = message.contact.phone_number
     if is_valid_russian_phone(phone_number):
         # res = check_admin(message.from_user.id)
         res = check_user_by_phone(phone_number)
@@ -95,13 +97,12 @@ async def define_group(message: Message, state: FSMContext):
         state.set_state(RegisterState.student_group)
     if text == "💼Сотрудник":
         add_ugroup(message.from_user.id, "Сотрудник")
-        await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
+        await message.answer("Поздравляем! Теперь вы можете спасать жизни!", reply_markup=get_main_menu_keyboard())
         await state.clear()
     if text == "🤲Внешний донор":
         add_ugroup(message.from_user.id, "Внешний донор")
-        await message.answer("Поздравляем! Теперь вы можете спасать жизни!")
+        await message.answer("Поздравляем! Теперь вы можете спасать жизни!", reply_markup=get_main_menu_keyboard())
         await state.clear()
-    pass
 
 
 @dp.message(RegisterState.student_group)
