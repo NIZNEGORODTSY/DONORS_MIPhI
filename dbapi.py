@@ -201,6 +201,34 @@ def add_registration(eid: int, uid: int):
 
     execute(my_query)
 
+def get_question(uid: int):
+    def my_query(cursor):
+        query = f"""SELECT * FROM questions WHERE uid = {uid}"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+def get_all_registrations() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM registered_people"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
 def get_all_users() -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM users"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
+
+def get_all_donations() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM donations"""
+        cursor.execute(query)
+        return cursor.fetchall()
+    res = execute(my_query)
+    return res
