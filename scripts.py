@@ -162,23 +162,23 @@ def get_restrictions(requirements):
         filename = 'messages/donation_mephi.txt'
     elif requirements == '🔙Вернуться в меню' or requirements == '':
         return
-    
+
     try:
         with open(filename, 'r', encoding='utf-8') as file:
             current_section = ""
             output = []
-            
+
             for line in file:
                 line = line.strip()
                 if not line:
                     continue
-                
+
                 # Обработка секций
                 if line.startswith("! "):
                     current_section = line[2:].strip()
                     output.append(f"\n{current_section.upper()}\n")
                     output.append("―" * 60 + "\n")
-                
+
                 # Обработка основных пунктов
                 elif line.startswith("-> "):
                     item = line[3:].strip()
@@ -188,18 +188,18 @@ def get_restrictions(requirements):
                         output.append(f" • {desc.strip()} — {details.strip()}\n")
                     else:
                         output.append(f" • {item}\n")
-                
+
                 # Обработка подпунктов
                 elif line.startswith("--> "):
                     subitem = line[4:].strip()
                     output.append(f"    ◦ {subitem}\n")
-                
+
                 # Обработка обычного текста (если есть)
                 else:
                     output.append(f"  {line}\n")
-            
+
             return "".join(output).strip()
-    
+
     except FileNotFoundError:
         return f"Файл {filename} не найден"
     except Exception as e:
