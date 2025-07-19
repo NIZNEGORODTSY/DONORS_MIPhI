@@ -165,7 +165,7 @@ def add_question(uid: int, question: str):
 
 def get_all_questions() -> list:
     def my_query(cursor):
-        query = f"""SELECT * FROM questions"""
+        query = f"""SELECT * FROM questions ORDER BY id_q"""
         cursor.execute(query)
         return cursor.fetchall()
 
@@ -200,3 +200,7 @@ def add_registration(eid: int, uid: int):
         cursor.execute(query)
 
     execute(my_query)
+
+def get_all_users() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users"""

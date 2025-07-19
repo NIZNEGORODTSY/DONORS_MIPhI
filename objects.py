@@ -51,6 +51,14 @@ class UpcomingEvent:
     def __init__(self):
         pass
 
+class Registration:
+    Id: int
+    Eid: int
+    Uid: int
+
+    def __init__(self):
+        pass
+
 
 class InfoTypes:
     DonationMEPHI = 0
