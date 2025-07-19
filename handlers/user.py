@@ -9,7 +9,8 @@ from aiogram.enums import ParseMode
 from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard, \
     get_detailed_information
 
-from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question, get_upcoming_events
+from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question, \
+    get_upcoming_events, add_registration, add_user
 
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
     get_daily_weather, display_weather, get_restrictions
@@ -52,7 +53,7 @@ async def authorization(message: Message, state: FSMContext):
 @dp.message(AuthState.waiting_for_phone)  # Хэндлер для состояния
 async def process_phone(message: Message, state: FSMContext):
     phone_number = message.contact.phone_number
-    phone_number = '+7 934 324 5456'
+    # phone_number = '+7 934 324 5456'
     if is_valid_russian_phone(phone_number):
         # res = check_admin(message.from_user.id)
         res = check_user_by_phone(phone_number)
@@ -64,6 +65,7 @@ async def process_phone(message: Message, state: FSMContext):
             await state.set_state(AuthState.waiting_for_answer)
         else:
             await message.answer("Чтобы создать аккаунт, напишите ваше ФИО")
+            add_user(phone_number, message.from_user.id)
             await state.set_state(RegisterState.fio)
     else:
         await message.answer('Проверьте правильность введённых данных!')
@@ -82,8 +84,8 @@ async def waiting_for_answer(message: Message, state: FSMContext):
 
 @dp.message(AuthState.waiting_for_right_fio)
 async def waiting_for_right_fio(message: Message, state: FSMContext):
-    text = message.text
-    add_fio(message.from_user.id, text)
+    fio = message.text
+    add_fio(message.from_user.id, fio)
     await message.answer('Данные успешно изменены! Добро пожаловать в меню: /menu',
                          reply_markup=get_main_menu_keyboard())
     await state.clear()
@@ -131,11 +133,18 @@ async def show_profile(message: Message, state: FSMContext):
     date1 = name.LastGavr
     date2 = name.LastFMBA
     date_res, place = compare_date(date1, date2)
-    await message.answer(f"""<b>ФИО</b>: {name.Fio}
-<b>Количество донаций:</b> {name.SumCount}
+    NAME = name.Fio
+    AMOUNT = name.SumCount
+    REGISTRY = name.Registry
+    if AMOUNT is None:
+        AMOUNT = 0
+    if REGISTRY is None:
+        REGISTRY = 0
+    await message.answer(f"""<b>ФИО</b>: {NAME}
+<b>Количество донаций:</b> {AMOUNT}
 <b>Дата последней донации:</b> {date_res}
 <b>Место последней донации:</b> {place}
-<b>Регистрация в регистре ДМК:</b> {name.Registry}
+<b>Регистрация в регистре ДМК:</b> {REGISTRY}
 <b>История донаций:</b> 
 {display_history(history)}""", parse_mode=ParseMode.HTML)
     await state.clear()
@@ -175,6 +184,9 @@ async def info_about_donation(message: Message, state: FSMContext):
 @dp.message(InfoState.detailed_information)
 async def info_about_donation(message: Message, state: FSMContext):
     text = message.text
+    if text == "🔙Вернуться в меню":
+        await message.answer("Добро пожаловать в меню!", reply_markup=get_main_menu_keyboard())
+        await state.clear()
     await message.answer(get_restrictions(f"{text}"))
 
 

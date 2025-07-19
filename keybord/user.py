@@ -68,5 +68,6 @@ def get_detailed_information():
     builder.add(KeyboardButton(text="Процедура вступления в регистр доноров костного мозга"))
     builder.add(KeyboardButton(text="Процедура донации"))
     builder.add(KeyboardButton(text="Процедура сдачи крови в МИФИ"))
+    builder.add(KeyboardButton(text="🔙Вернуться в меню"))
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)
