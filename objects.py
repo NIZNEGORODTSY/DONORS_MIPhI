@@ -1,20 +1,21 @@
 import datetime
+from typing import Optional
 
 
 class User:
     Id: int
-    Fio: str | None
-    Group: str | None
-    CountGavr: int | None
-    CountFMBA: int | None
-    SumCount: int | None
-    LastGavr: datetime.date | None
-    LastFMBA: datetime.date | None
-    Contacts: str | None
-    PhoneNumber: str | None
+    Fio: Optional[str] = None
+    Group: Optional[str] = None
+    CountGavr: Optional[str] = None
+    CountFMBA: Optional[str] = None
+    SumCount: Optional[int] = None
+    LastGavr: Optional[datetime.date] = None
+    LastFMBA: Optional[datetime.date] = None
+    Contacts: Optional[str] = None
+    PhoneNumber: Optional[str] = None
     IsAdmin: int
-    Registry: int | None
-    Tgid: int | None
+    Registry: Optional[int] = None
+    Tgid: Optional[str] = None
 
     def __init__(self):
         pass
@@ -22,9 +23,9 @@ class User:
 
 class Donation:
     Id: int
-    Uid: int | None
-    DonPlace: str | None
-    DonDate: datetime.date | None
+    Uid: Optional[int] = None
+    DonPlace: Optional[str] = None
+    DonDate: Optional[datetime.date] = None
 
     def __init__(self):
         pass
