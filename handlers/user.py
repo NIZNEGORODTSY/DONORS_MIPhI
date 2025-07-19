@@ -225,6 +225,14 @@ async def waiting_for_questions(message: Message, state: FSMContext):
                          reply_markup=get_main_menu_keyboard())
 
 
+@dp.message(F.text == "Ответы на ваши вопросы")
+async def show_profile(message: Message, state: FSMContext):
+    name = get_user(message.from_user.id)    #Возвращает 408,409
+    if name ==
+    
+    await state.clear()
+
+
 @dp.message(Command('menu'))
 async def another_menu_handler(message: Message):
     await message.answer(
