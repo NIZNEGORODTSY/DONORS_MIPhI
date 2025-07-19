@@ -6,12 +6,13 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 
-from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard
+from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_group, get_phone_number_keyboard, \
+    get_detailed_information
 
 from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question, get_upcoming_events
 
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
-    get_daily_weather, display_weather
+    get_daily_weather, display_weather, get_restrictions
 
 dp = Router()
 
@@ -31,6 +32,7 @@ class RegisterState(StatesGroup):
 
 class InfoState(StatesGroup):
     main_state = State()
+    detailed_information = State()
 
 
 class Questions(StatesGroup):
@@ -50,7 +52,7 @@ async def authorization(message: Message, state: FSMContext):
 @dp.message(AuthState.waiting_for_phone)  # Хэндлер для состояния
 async def process_phone(message: Message, state: FSMContext):
     phone_number = message.contact.phone_number
-    # phone_number = '+7 934 324 5456'
+    phone_number = '+7 934 324 5456'
     if is_valid_russian_phone(phone_number):
         # res = check_admin(message.from_user.id)
         res = check_user_by_phone(phone_number)
@@ -159,14 +161,21 @@ async def waiting_for_date(message: Message, state: FSMContext):
     for event in data:
         if event.Id == int(chose):
             res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
-    await message.answer(f"Вы выбрали:\n{res}")
+    await message.answer(f"Вы выбрали:\n{res}", reply_markup=get_main_menu_keyboard())
+    await message.answer(f"Вы записаны✅", reply_markup=get_main_menu_keyboard())
     # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
 
 
 @dp.message(F.text == "ℹ️ Информация о донорстве")
 async def info_about_donation(message: Message, state: FSMContext):
-    await message.answer()
-    await state.clear()
+    await message.answer('Выберите нужный раздел', reply_markup=get_detailed_information())
+    await state.set_state(InfoState.detailed_information)
+
+
+@dp.message(InfoState.detailed_information)
+async def info_about_donation(message: Message, state: FSMContext):
+    text = message.text
+    await message.answer(get_restrictions(f"{text}"))
 
 
 @dp.message(F.text == "🌤 Рекомендации для доноров на сегодня")

@@ -170,8 +170,8 @@ def get_restrictions(requirements):
                 # Обработка секций
                 if line.startswith("! "):
                     current_section = line[2:].strip()
-                    print(f"\n\033[1;36m{current_section.upper()}\033[0m")  # Цветной заголовок
-                    print("\033[90m" + "―" * 60 + "\033[0m")  # Серый разделитель
+                    return f"\n{current_section.upper()}"  # Цветной заголовок
+                    return f"" + "―" * 60 + ""  # Серый разделитель
 
                 # Обработка основных пунктов
                 elif line.startswith("-> "):
@@ -179,23 +179,23 @@ def get_restrictions(requirements):
                     # Разделение на описание и детали (если есть разделитель '-')
                     if " - " in item:
                         desc, details = item.split(" - ", 1)
-                        print(f" \033[1m• {desc.strip()}\033[0m — {details.strip()}")
+                        return f" \033[1m• {desc.strip()}\033[0m — {details.strip()}"
                     else:
-                        print(f" \033[1m• {item}\033[0m")
+                        return f" \033[1m• {item}\033[0m"
 
                 # Обработка подпунктов
                 elif line.startswith("--> "):
                     subitem = line[4:].strip()
-                    print(f"    ◦ {subitem}")
+                    return f"    ◦ {subitem}"
 
                 # Обработка обычного текста (если есть)
                 else:
-                    print(f"  {line}")
+                    return f"  {line}"
 
     except FileNotFoundError:
-        print(f"\n\033[1;31mФайл {filename} не найден\033[0m\n")
+        return f"\n\033[1;31mФайл {filename} не найден\033[0m\n"
     except Exception as e:
-        print(f"\n\033[1;31mОшибка при обработке файла: {e}\033[0m\n")
+        return f"\n\033[1;31mОшибка при обработке файла: {e}\033[0m\n"
 
 
 get_restrictions('Подготовка к донации (за 2-3 дня)')
