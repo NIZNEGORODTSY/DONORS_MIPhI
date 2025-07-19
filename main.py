@@ -20,6 +20,7 @@ ADMINS = []
 for el in data:
     ADMINS.append(el.Tgid)
 
+ADMINS = get_admins()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
