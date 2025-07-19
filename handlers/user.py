@@ -94,7 +94,7 @@ async def define_group(message: Message, state: FSMContext):
     text = message.text
     if text == "🎓Студент":
         await message.answer("Напишите номер вашей группы")
-        state.set_state(RegisterState.student_group)
+        await state.set_state(RegisterState.student_group)
     if text == "💼Сотрудник":
         add_ugroup(message.from_user.id, "Сотрудник")
         await message.answer("Поздравляем! Теперь вы можете спасать жизни!", reply_markup=get_main_menu_keyboard())

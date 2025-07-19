@@ -154,3 +154,10 @@ def get_admins():
 
     res = execute(my_query)
     return res
+
+def add_donor(fio: str, ugroup: str, registry: str):
+    def my_query(cursor):
+        query = f"""INSERT INTO users (fio, ugroup, registry) VALUES ('{fio}', '{ugroup}', '{registry}')"""
+        cursor.execute(query)
+
+    execute(my_query)
