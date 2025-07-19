@@ -12,7 +12,7 @@ from keybord.admin import get_organizer_keyboard
 from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
-from core import add_donor
+from core import add_donor, add_question
 from dbapi import get_all_questions
 
 from keybord.user import choose_group
@@ -135,7 +135,11 @@ async def process_event_blood_center(message: Message, state: FSMContext):
 
 @dp.message(F.text == "❓ Вопросы от пользователей")
 async def show_questions(message: Message, state: FSMContext):
-    await message.answer("Всего " + str(len(get_all_questions())) + " новых сообщений. Введите номер сообщние которое хотите увидеть и ответить на него")
+    k=0
+    for i in get_all_questions():
+        if i[3]==False:
+            k+=1
+    await message.answer("Всего " + str(k) + " новых сообщений. Введите номер сообщние которое хотите увидеть и ответить на него")
     await state.set_state(AnswerForm.answer)
 
 @dp.message(AnswerForm.answer)
@@ -154,7 +158,8 @@ async def process_answer(message: Message, state: FSMContext):
     text = message.text
     data = await state.get_data()
     id_q = data['id_q']
-    await message.answer(id_q + text)
+    add_question(id_q, text)
+    await message.answer("Ответ на вопрос записан")
     await state.clear()
 
 
