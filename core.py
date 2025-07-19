@@ -109,6 +109,9 @@ def get_admins() -> list[User]:
 
     return res
 
+def add_donor(fio: str, ugroup: str, registry: str): # добавление пользователя админом
+    dbapi.add_donor(fio, ugroup, registry)
+
 
 def get_info_message(info_type: int) -> str:
     if info_type == InfoTypes.DonationMEPHI:
