@@ -10,7 +10,7 @@ from keybord.user import get_consent_keyboard, get_main_menu_keyboard, choose_gr
     get_detailed_information
 
 from core import check_user_by_phone, get_user, add_fio, get_user_history, add_ugroup, add_question, \
-    get_upcoming_events, add_registration, add_user
+    get_upcoming_events, add_registration, add_user, get_question
 
 from scripts import is_valid_russian_phone, compare_date, display_history, validate_full_name, generate_donor_advice, \
     get_daily_weather, display_weather, get_restrictions
@@ -216,9 +216,9 @@ async def waiting_for_questions(message: Message, state: FSMContext):
 
 @dp.message(F.text == "Ответы на ваши вопросы")
 async def show_profile(message: Message, state: FSMContext):
-    name = get_user(message.from_user.id)    #Возвращает 408,409
-    if name ==
-    
+    #Возвращает 408,409
+    x=get_user(message.from_user.id).Id
+    print(get_question(x).Id, get_question(x).Uid, get_question(x).QuestionMsg, get_question(x).HasReply, get_question(x).IsSeen, get_question(x).Answer)
     await state.clear()
 
 

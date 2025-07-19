@@ -193,17 +193,16 @@ async def process_broadcast_message(message: Message, state: FSMContext):
     await state.clear()
 
 
-@dp.message(F.text == "📄 Редактировать информацию")
+@dp.message(F.text == "📄 Редактировать информацию о доноре")
 async def edit_info_start(message: Message, state: FSMContext):
+    await message.answer("Введите номер телефона донора, данные которого вы хотите изменить", reply_markup=get_info_sections_keyboard())
     await state.set_state(EditInfoForm.section)
-    await message.answer("Выберите раздел для редактирования:", reply_markup=get_info_sections_keyboard())
 
 
 @dp.message(EditInfoForm.section)
 async def process_info_section(message: Message, state: FSMContext):
-    await state.update_data(section=message.text)
-    await state.set_state(EditInfoForm.new_text)
-    await message.answer(f"Введите новый текст для раздела '{message.text}':", reply_markup=types.ReplyKeyboardRemove())
+    text = message.text
+    #запрос к бд, чтобы получить по номеру телефона всю остальную информацию
 
 
 @dp.message(EditInfoForm.new_text)
