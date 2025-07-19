@@ -211,14 +211,33 @@ def get_all_users() -> list[User]:
 
 
 def get_all_registations() -> list[Registration]:
-    pass
+    ans = dbapi.get_all_registrations()
 
+    res = []
 
-def export_excel() -> None:
-    upcoming_events = get_upcoming_events()
-    questions = get_all_questions()
-    users = get_all_users()
-    registrations = get_all_registations()
+    for r in ans:
+        reg = Registration()
+        reg.Id = r[0]
+        reg.Eid = r[1]
+        reg.Uid = r[2]
+        res.append(reg)
+    
+    return res
+
+def get_all_donations() -> list[Donation]:
+    ans = dbapi.get_all_donations()
+
+    res = []
+
+    for d in ans:
+        don = Donation()
+        don.Id = d[0]
+        don.Uid = d[1]
+        don.DonPlace = d[2]
+        don.DonDate = d[3]
+        res.append(don)
+    
+    return res
 
 
 def get_donor(phone_number: int) -> User:
@@ -264,3 +283,32 @@ def get_questions_by_user(uid: int) -> list[Question]:
 
 def edit_donor(rules: dict, phone_number: str):
     dbapi.edit_donor(rules, phone_number)
+
+
+def export_excel() -> None:
+    upcoming_events = get_upcoming_events()
+    questions = get_all_questions()
+    users = get_all_users()
+    registrations = get_all_registations()
+    donations = get_all_donations()
+
+    df_ev = pd.DataFrame({
+        'Номер п/п': [ev.Id for ev in upcoming_events],
+        'Место проведения': [ev.DonPlace for ev in upcoming_events],
+        'Время проведения': [ev.DonDate for ev in upcoming_events]
+    })
+
+    df_ev.to_excel('export/upcoming_events.xlsx')
+
+    df_q = pd.DataFrame({
+        'Номер п/п': [q.Id for q in questions],
+        'Айди донора': [q.Uid for q in questions],
+        'Текст вопроса': [q.QuestionMsg for q in questions],
+        'Есть ответ': ['Да' if q.HasReply == 1 else 'Нет' for q in questions],
+        'Просмотрено донором': ['Да' if q.IsSeen == 1 else 'Нет' for q in questions],
+        'Ответ организатора': [q.Answer for q in questions]
+    })
+
+    df_q.to_excel('export/questions.xlsx')
+
+export_excel()
