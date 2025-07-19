@@ -146,6 +146,7 @@ def get_donation_history(uid: int):
     res = execute(my_query)
     return res
 
+
 def get_admins():
     def my_query(cursor):
         query = f"""SELECT * FROM users WHERE isadmin = 1"""
@@ -155,9 +156,30 @@ def get_admins():
     res = execute(my_query)
     return res
 
+
 def add_donor(fio: str, ugroup: str, registry: str):
     def my_query(cursor):
         query = f"""INSERT INTO users (fio, ugroup, registry) VALUES ('{fio}', '{ugroup}', '{registry}')"""
         cursor.execute(query)
+
+    execute(my_query)
+
+
+def add_question(uid: int, question: str):
+    def my_query(cursor):
+        query = f"""INSERT INTO questions (uid, question) VALUES ({uid}, '{question}')"""
+        cursor.execute(query)
+
+    execute(my_query)
+
+
+def get_all_questions() -> list:
+    def my_query(cursor):
+        query = f"""SLECT * FROM questions"""
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    res = execute(my_query)
+    return res
 
     execute(my_query)

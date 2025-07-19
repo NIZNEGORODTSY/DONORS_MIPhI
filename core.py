@@ -1,5 +1,5 @@
 import dbapi
-from objects import User, Donation, InfoTypes
+from objects import *
 
 
 def get_uid(tgid: int) -> int:
@@ -109,8 +109,28 @@ def get_admins() -> list[User]:
 
     return res
 
-def add_donor(fio: str, ugroup: str, registry: str): # добавление пользователя админом
+
+def add_donor(fio: str, ugroup: str, registry: str):  # добавление пользователя админом
     dbapi.add_donor(fio, ugroup, registry)
+
+
+def add_question(uid: int, question: str):
+    dbapi.add_question(uid, question)
+
+
+def get_all_questions() -> list[Question]:
+    ans = dbapi.get_all_questions()
+
+    res = []
+
+    for q in ans:
+        question = Question()
+        question.Id = q[0]
+        question.Uid = q[1]
+        question.QuestionMsg = q[2]
+        res.append(question)
+
+    return res
 
 
 def get_info_message(info_type: int) -> str:
