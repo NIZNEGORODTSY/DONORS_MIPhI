@@ -1,5 +1,6 @@
 from aiogram.types import KeyboardButton
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 def get_consent_keyboard():
@@ -55,3 +56,19 @@ def get_phone_number_keyboard():
         resize_keyboard=True
     )
 
+
+def get_detailed_information():
+    builder = ReplyKeyboardBuilder()
+
+    builder.add(KeyboardButton(text="Требования к донорам"))
+    builder.add(KeyboardButton(text="Подготовка к донации (за 2-3 дня)"))
+    builder.add(KeyboardButton(text="Рацион донора за 2-3 дня до донации"))
+    builder.add(KeyboardButton(text="Абсолютные противопоказания"))
+    builder.add(KeyboardButton(text="Временные противопоказания"))
+    builder.add(KeyboardButton(text="Важность донорства костного мозга"))
+    builder.add(KeyboardButton(text="Процедура вступления в регистр доноров костного мозга"))
+    builder.add(KeyboardButton(text="Процедура донации"))
+    builder.add(KeyboardButton(text="Процедура сдачи крови в МИФИ"))
+    builder.add(KeyboardButton(text="🔙Вернуться в меню"))
+    builder.adjust(2)
+    return builder.as_markup(resize_keyboard=True)

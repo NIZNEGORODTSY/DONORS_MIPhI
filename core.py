@@ -179,6 +179,19 @@ def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
     dbapi.add_question_repl_cond(qid)
 
+def get_question(uid: int) -> Question:
+    q = dbapi.get_question(uid)
+
+    question = Question()
+    question.Id = q[0][0]
+    question.Uid = q[0][1]
+    question.QuestionMsg = q[0][2]
+    question.HasReply = q[0][3]
+    question.IsSeen = q[0][4]
+    question.Answer = q[0][5]
+
+    return question
+
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)
 
@@ -205,9 +218,33 @@ def get_all_users() -> list[User]:
     return res
 
 def get_all_registations() -> list[Registration]:
-    pass
+    ans = dbapi.get_all_registrations()
+
+    res = []
+
+    for r in ans:
+        reg = Registration()
+        reg.Id = r[0]
+        reg.Eid = r[1]
+        reg.Uid = r[2]
+
+        res.append(reg)
+    return res
+
+def get_all_donations() -> list[Donation]:
+    ans = dbapi.get_all_donations()
+
+    res = []
+
+    for d in ans:
+        don = Donation()
+        don.Id = d[0]
+        don.Uid = d[1]
+        don.DonPlace = d[2]
+        don.DonDate = d[3]
 
 def export_excel() -> None:
     upcoming_events = get_upcoming_events()
     questions = get_all_questions()
     users = get_all_users()
+    registrations = get_all_registations()
