@@ -150,7 +150,7 @@ def get_donation_history(uid: int):
 
 def get_admins():
     def my_query(cursor):
-        query = f"""SELECT * FROM users WHERE isadmim = 1"""
+        query = f"""SELECT * FROM users WHERE isadmin = 1"""
         cursor.execute(query)
         return cursor.fetchall()
 

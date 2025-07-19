@@ -7,14 +7,13 @@ import config.reader as reader
 
 from handlers import admin, user
 
-#from based import gets_admins
+from core import get_admins
 from keybord.admin import get_organizer_keyboard
 
 # Настройка логирования
 
 BOT_TOKEN = reader.get_param_value('token')
-#ADMINS = gets_admins()
-ADMINS = ''
+ADMINS = get_admins()
 
 import logging
 logging.basicConfig(level=logging.INFO)
