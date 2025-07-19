@@ -13,6 +13,7 @@ from keybord.admin import get_donor_type_keyboard
 from keybord.admin import get_yes_no_keyboard
 
 from core import add_donor
+from dbapi import get_all_questions
 
 from keybord.user import choose_group
 
@@ -36,8 +37,8 @@ class EventForm(StatesGroup):
 
 
 class AnswerForm(StatesGroup):
-    question_id = State()
     answer = State()
+    question_id = State()
 
 
 class BroadcastForm(StatesGroup):
@@ -133,37 +134,27 @@ async def process_event_blood_center(message: Message, state: FSMContext):
 
 
 @dp.message(F.text == "❓ Вопросы от пользователей")
-async def show_questions(message: Message):
-    if not questions_db:
-        await message.answer("Нет новых вопросов.")
-        return
-
-    for i, question in enumerate(questions_db):
-        builder = InlineKeyboardBuilder()
-        builder.add(InlineKeyboardButton(text="Ответить", callback_data=f"answer_{i}"))
-        await message.answer(f"Вопрос #{i + 1}:\n{question['text']}", reply_markup=builder.as_markup())
-
-
-@dp.callback_query(F.data.startswith("answer_"))
-async def answer_question(callback: types.CallbackQuery, state: FSMContext):
-    question_id = int(callback.data.split("_")[1])
+async def show_questions(message: Message, state: FSMContext):
+    await message.answer("Всего " + str(len(get_all_questions())) + " новых сообщений. Введите номер сообщние которое хотите увидеть и ответить на него")
     await state.set_state(AnswerForm.answer)
-    await state.update_data(question_id=question_id)
-    await callback.message.answer("Введите ваш ответ:")
-
 
 @dp.message(AnswerForm.answer)
 async def process_answer(message: Message, state: FSMContext):
+    text = message.text
+    for i in get_all_questions():
+        print(i)
+        if str(i[0])==text:
+           await message.answer(str(i[2])+ "\nВведите ответ:")
+        break 
+    await state.update_data(id_q=str(i[0]))
+    await state.set_state(AnswerForm.question_id)
+
+@dp.message(AnswerForm.question_id)
+async def process_answer(message: Message, state: FSMContext):
+    text = message.text
     data = await state.get_data()
-    question_id = data['question_id']
-    answer = message.text
-
-    # Здесь должен быть код для отправки ответа пользователю
-    question = questions_db[question_id]
-    await message.answer(f"Ответ на вопрос от {question['user']} отправлен!")
-
-    # Удаляем вопрос из списка
-    questions_db.pop(question_id)
+    id_q = data['id_q']
+    await message.answer(id_q + text)
     await state.clear()
 
 
