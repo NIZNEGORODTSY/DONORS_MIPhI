@@ -142,6 +142,11 @@ async def show_information(message: Message, state: FSMContext):
     await state.clear()
 
 
+@dp.message(F.text == "📅 Записаться на донацию")
+async def sign_up_for_donation(message: Message, state: FSMContext):
+    await message.answer("Выберите дату и место.")
+
+
 @dp.message(F.text == "❓ Задать вопрос")
 async def show_information(message: Message, state: FSMContext):
     await message.answer("Напишите ваш вопрос.")

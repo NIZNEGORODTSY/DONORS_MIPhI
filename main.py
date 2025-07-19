@@ -15,14 +15,11 @@ from keybord.user import get_auth_keyboard
 # Настройка логирования
 
 TOKEN = reader.get_param_value('token')
-#TOKEN = "8195479409:AAFfZj3V05P5bZD0rCwwWF_a80nX6NObsa4"
 data = get_admins()
 ADMINS = []
 
 for el in data:
     ADMINS.append(el.Tgid)
-
-ADMINS = get_admins()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
