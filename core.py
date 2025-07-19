@@ -155,5 +155,17 @@ def get_info_message(info_type: int) -> str:
 
     return res
 
+def get_upcoming_events() -> list[UpcomingEvent]:
+    ans = dbapi.get_upcoming_events()
+
+    res = []
+
+    for e in ans:
+        event = UpcomingEvent()
+        event.Id = e[0]
+        event.DonPlace = e[1]
+        event.DonDate = e[2]
+        res.append(event)
+    return res
 
 get_admins()
