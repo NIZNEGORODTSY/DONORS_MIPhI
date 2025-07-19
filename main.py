@@ -67,10 +67,7 @@ async def cmd_start(message: Message, state: FSMContext):
 
         !!!Продолжая использование, вы подтверждаете согласие с этими условиями!!!""", parse_mode=ParseMode.HTML)
         await bot.set_my_commands([
-            BotCommand(command='start', description='Приветствие'),
-            BotCommand(command='menu', description='Меню'),
-            BotCommand(command='another_menu', description='Другое меню'),
-            BotCommand(command='authenticate', description='идентификация')
+            BotCommand(command='start', description='Приветствие')
         ])
         await message.answer("Давайте начнём! Для регистрации нажмите /authenticate или выбери раздел в меню ↓")
 
