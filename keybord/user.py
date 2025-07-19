@@ -25,17 +25,16 @@ def choose_group():
 
 
 def get_main_menu_keyboard():
-    return ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="📋 Мои данные")],
-            [KeyboardButton(text="📅 Записаться на донацию")],
-            [KeyboardButton(text="ℹ️ Информация о донорстве")],
-            [KeyboardButton(text="🌤 Рекомендации для доноров на сегодня")],
-            [KeyboardButton(text="❓ Задать вопрос")],
-            [KeyboardButton(text="Ответы на ваши вопросы")]
-        ],
-        resize_keyboard=True
-    )
+    builder = ReplyKeyboardBuilder()
+
+    builder.add(KeyboardButton(text="📋 Мои данные"))
+    builder.add(KeyboardButton(text="📅 Записаться на донацию"))
+    builder.add(KeyboardButton(text="ℹ️ Информация о донорстве"))
+    builder.add(KeyboardButton(text="🌤 Рекомендации для доноров на сегодня"))
+    builder.add(KeyboardButton(text="❓ Задать вопрос"))
+    builder.add(KeyboardButton(text="Ответы на ваши вопросы"))
+    builder.adjust(2)
+    return builder.as_markup(resize_keyboard=True)
 
 
 def get_auth_keyboard():

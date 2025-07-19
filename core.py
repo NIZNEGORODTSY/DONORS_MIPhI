@@ -1,6 +1,6 @@
 import dbapi
 from objects import *
-import pandas as pd # для экспорта
+import pandas as pd  # для экспорта
 
 
 def get_uid(tgid: int) -> int:
@@ -162,6 +162,7 @@ def get_info_message(info_type: int) -> str:
 
     return res
 
+
 def get_upcoming_events() -> list[UpcomingEvent]:
     ans = dbapi.get_upcoming_events()
 
@@ -175,25 +176,15 @@ def get_upcoming_events() -> list[UpcomingEvent]:
         res.append(event)
     return res
 
+
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
     dbapi.add_question_repl_cond(qid)
 
-def get_question(uid: int) -> Question:
-    q = dbapi.get_question(uid)
-
-    question = Question()
-    question.Id = q[0][0]
-    question.Uid = q[0][1]
-    question.QuestionMsg = q[0][2]
-    question.HasReply = q[0][3]
-    question.IsSeen = q[0][4]
-    question.Answer = q[0][5]
-
-    return question
 
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)
+
 
 def get_all_users() -> list[User]:
     ans = dbapi.get_all_users()
@@ -217,31 +208,10 @@ def get_all_users() -> list[User]:
         res.append(user)
     return res
 
+
 def get_all_registations() -> list[Registration]:
-    ans = dbapi.get_all_registrations()
+    pass
 
-    res = []
-
-    for r in ans:
-        reg = Registration()
-        reg.Id = r[0]
-        reg.Eid = r[1]
-        reg.Uid = r[2]
-
-        res.append(reg)
-    return res
-
-def get_all_donations() -> list[Donation]:
-    ans = dbapi.get_all_donations()
-
-    res = []
-
-    for d in ans:
-        don = Donation()
-        don.Id = d[0]
-        don.Uid = d[1]
-        don.DonPlace = d[2]
-        don.DonDate = d[3]
 
 def export_excel() -> None:
     upcoming_events = get_upcoming_events()
@@ -269,3 +239,21 @@ def get_donor(phone_number: int) -> User:
     res.Tgid = ans[0][12]
 
     return res
+
+
+def get_question(uid: int) -> Question:
+    q = dbapi.get_question(uid)
+
+    question = Question()
+    question.Id = q[0][0]
+    question.Uid = q[0][1]
+    question.QuestionMsg = q[0][2]
+    question.HasReply = q[0][3]
+    question.IsSeen = q[0][4]
+    question.Answer = q[0][5]
+
+    return question
+
+
+def edit_donor(rules: dict, phone_number: str):
+    dbapi.edit_donor(rules, phone_number)

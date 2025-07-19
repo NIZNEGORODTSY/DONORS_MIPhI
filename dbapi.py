@@ -172,13 +172,16 @@ def get_all_questions() -> list:
     res = execute(my_query)
     return res
 
+
 def get_upcoming_events() -> list:
     def my_query(cursor):
         query = f"""SELECT * FROM upcoming_event"""
         cursor.execute(query)
         return cursor.fetchall()
+
     res = execute(my_query)
     return res
+
 
 def add_question_ans(qid: int, ans: str):
     def my_query(cursor):
@@ -187,12 +190,14 @@ def add_question_ans(qid: int, ans: str):
 
     execute(my_query)
 
+
 def add_question_repl_cond(qid: int):
     def my_query(cursor):
         query = f"""UPDATE questions SET hasreply = 1 WHERE id_q = {qid}"""
         cursor.execute(query)
-    
+
     execute(my_query)
+
 
 def add_registration(eid: int, uid: int):
     def my_query(cursor):
@@ -201,11 +206,37 @@ def add_registration(eid: int, uid: int):
 
     execute(my_query)
 
+
+def get_all_users() -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users"""
+
+
+def get_donor(phone_number: int) -> list:
+    def my_query(cursor):
+        query = f"""SELECT * FROM users WHERE tgid = '{phone_number}'"""
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    res = execute(my_query)
+    return res
+
+
+def edit_donor(rules: dict, phone_number: str):
+    for key, value in rules.items():
+        def my_query(cursor):
+            query = f"""UPDATE users SET '{key}' = '{value}' WHERE id_q = '{phone_number}'"""
+            cursor.execute(query)
+
+    execute(my_query)
+
+
 def get_question(uid: int):
     def my_query(cursor):
         query = f"""SELECT * FROM questions WHERE uid = {uid}"""
         cursor.execute(query)
         return cursor.fetchall()
+
     res = execute(my_query)
     return res
 

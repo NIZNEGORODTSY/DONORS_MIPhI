@@ -164,15 +164,25 @@ async def sign_up_for_donation(message: Message, state: FSMContext):
 
 @dp.message(SignUpForDonation.waiting_for_date)
 async def waiting_for_date(message: Message, state: FSMContext):
-    chose = message.text
     data = get_upcoming_events()
-    res = ''
+    max_id = 1
     for event in data:
-        if event.Id == int(chose):
-            res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
-    await message.answer(f"Вы выбрали:\n{res}", reply_markup=get_main_menu_keyboard())
-    await message.answer(f"Вы записаны✅", reply_markup=get_main_menu_keyboard())
-    # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
+        max_id += 1
+
+    chose = message.text
+    if chose.isdigit() and 1 <= int(chose) <= max_id:
+        res = ''
+        MAX = 0
+        for event in data:
+            if event.Id == int(chose):
+                res = f'место: {event.DonPlace}, дата и время: {event.DonDate}.'
+        await message.answer(f"Вы выбрали:\n{res}", reply_markup=get_main_menu_keyboard())
+        uid = get_user(message.from_user.id).Id
+        add_registration(chose, uid)
+        await message.answer(f"Вы записаны✅", reply_markup=get_main_menu_keyboard())
+        # ЗДЕСЬ БУДЕТ ФУНЦКИЯ ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД
+    else:
+        await message.answer('Проверьте правильность введённых данных')
 
 
 @dp.message(F.text == "ℹ️ Информация о донорстве")
@@ -187,6 +197,7 @@ async def info_about_donation(message: Message, state: FSMContext):
     if text == "🔙Вернуться в меню":
         await message.answer("Добро пожаловать в меню!", reply_markup=get_main_menu_keyboard())
         await state.clear()
+        text = ""
     await message.answer(get_restrictions(f"{text}"))
 
 
