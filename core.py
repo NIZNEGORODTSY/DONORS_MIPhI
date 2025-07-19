@@ -1,5 +1,6 @@
 import dbapi
 from objects import *
+import pandas as pd # для экспорта
 
 
 def get_uid(tgid: int) -> int:
@@ -176,9 +177,11 @@ def get_upcoming_events() -> list[UpcomingEvent]:
 
 def add_question_ans(qid: int, ans: str):
     dbapi.add_question_ans(qid, ans)
-    dbapi.add_question_repl_cond()
+    dbapi.add_question_repl_cond(qid)
 
 def add_registration(eid: int, uid: int):
     dbapi.add_registration(eid, uid)
 
-get_all_questions()
+
+def export_excel() -> None:
+    upcoming_events = get_upcoming_events()
